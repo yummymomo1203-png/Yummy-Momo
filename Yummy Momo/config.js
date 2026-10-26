@@ -1,6 +1,6 @@
 /* Separate shop configuration. Public browser-safe values only; never use a service-role key. */
 const RESTAURANT_CONFIG = {
-  publicMenuUrl: "", // Blank uses this deployment for table QR links.
+  publicMenuUrl: "https://yummymomo.vercel.app/", // Blank uses this deployment for table QR links.
   restaurantName: "Yummy Momo",
   tagline: "Yummy in your tummy",
   currency: "₹",
