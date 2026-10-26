@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Yummy Momo · Kitchen & Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #e23744;
+      --bg: #f7f7f9;
+      --card-bg: #ffffff;
+      --card-border: #e8e8ed;
+      --text: #202124;
+      --text-muted: #71717a;
+      --green: #10b981;
+      --amber: #f59e0b;
+      --blue: #3b82f6;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--card-border);
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-left h1 {
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: -0.3px;
+    }
+
+    .badge-live {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--green);
+      border: 1px solid var(--green);
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-tabs {
+      display: flex;
+      gap: 8px;
+    }
+
+    .nav-tab-btn {
+      background: transparent;
+      border: 1px solid var(--card-border);
+      color: var(--text-muted);
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .nav-tab-btn.active {
+      background: var(--primary);
+      color: #ffffff;
+      border-color: var(--primary);
+    }
+
+    main {
+      padding: 24px;
+      flex: 1;
+    }
+
+    /* Live Orders Grid */
+    .orders-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 20px;
+    }
+
+    .order-card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+      position: relative;
+    }
+
+    .order-card.status-accepted {
+      border-left: 6px solid var(--amber);
+    }
+    .order-card.status-cooking {
+      border-left: 6px solid var(--blue);
+    }
+    .order-card.status-ready {
+      border-left: 6px solid var(--green);
+    }
+
+    .order-header {
+      padding: 16px;
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .table-title {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .order-time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .order-body {
+      padding: 16px;
+      flex: 1;
+    }
+
+    .cust-info {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .items-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .item-entry {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.95rem;
+      font-weight: 600;
+      padding-bottom: 6px;
+      border-bottom: 1px dashed rgba(255,255,255,0.08);
+    }
+
+    .item-qty {
+      background: rgba(249, 87, 33, 0.2);
+      color: var(--primary);
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 800;
+      margin-right: 8px;
+    }
+
+    .kitchen-notes-box {
+      margin-top: 14px;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fde68a;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+
+    .order-footer {
+      padding: 14px 16px;
+      background: rgba(0, 0, 0, 0.2);
+      border-top: 1px solid var(--card-border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .order-total {
+      font-size: 1.1rem;
+      font-weight: 800;
+    }
+
+    .status-btn-group {
+      display: flex;
+      gap: 8px;
+    }
+
+    .action-btn {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 0.82rem;
+      font-weight: 800;
+      cursor: pointer;
+      border: none;
+      transition: opacity 0.2s;
+    }
+    .action-btn:hover { opacity: 0.9; }
+
+    .btn-cooking {
+      background: var(--blue);
+      color: #ffffff;
+    }
+    .btn-ready {
+      background: var(--green);
+      color: #ffffff;
+    }
+    .btn-served {
+      background: #71717a;
+      color: #ffffff;
+    }
+
+    /* History & Records View */
+    .history-container {
+      display: none;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--card-border);
+      padding: 16px;
+      border-radius: 12px;
+    }
+
+    .stat-card h4 {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+    }
+
+    .stat-card .val {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 12px;
+      border-bottom: 2px solid var(--card-border);
+      color: var(--text-muted);
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    /* Settings View */
+    .settings-container {
+      display: none;
+      max-width: 600px;
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .settings-container h3 {
+      font-size: 1.15rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .settings-container p {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .setting-group {
+      margin-bottom: 18px;
+    }
+
+    .setting-group label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .setting-group input {
+      width: 100%;
+      padding: 12px;
+      background: #f7f7f9;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      color: #ffffff;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    .btn-save-settings {
+      background: var(--primary);
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+  
+    /* Added admin views use the original kitchen palette, typography and cards. */
+    [hidden] { display:none ; }
+    button,input,select,textarea { font:inherit; }
+    button { min-height:44px; }
+    button:disabled { opacity:.5; cursor:not-allowed; }
+    button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,a:focus-visible { outline:2px solid var(--primary); outline-offset:3px; }
+    .nav-tabs { flex-wrap:wrap; }
+    .header-left { flex-wrap:wrap; }
+    .badge-live { color:#6ee7b7; }
+    .page-tools { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; margin-bottom:24px; }
+    .page-tools h2 { font-size:1.2rem; margin-bottom:6px; }
+    .muted { color:var(--text-muted); font-size:.875rem; line-height:1.6; }
+    .panel { background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:24px; margin-bottom:24px; }
+    .panel h3 { margin-bottom:16px; }
+    .toolbar,.filters { display:flex; gap:8px; flex-wrap:wrap; align-items:center; }
+    .filters { margin-bottom:20px; }
+    .filters .active { background:var(--primary); color:white; border-color:var(--primary); }
+    .secondary-btn { background:#e8e8ed; color:var(--text); border:1px solid #71717a; padding:10px 16px; border-radius:8px; cursor:pointer; font-weight:700; }
+    .primary-btn { background:var(--primary); color:white; border:0; padding:12px 20px; border-radius:8px; cursor:pointer; font-weight:800; }
+    .danger-btn { background:#991b1b; color:white; border:1px solid #b91c1c; padding:10px 14px; border-radius:8px; cursor:pointer; font-weight:700; }
+    .empty { grid-column:1/-1; text-align:center; padding:56px 20px; color:var(--text-muted); line-height:1.7; }
+    .status-pill { font-size:.8rem; font-weight:800; border-radius:8px; padding:6px 8px; white-space:nowrap; background:rgba(245,158,11,.12); color:#fcd34d; }
+    .status-pill.cooking { color:#93c5fd; background:rgba(59,130,246,.15); }
+    .status-pill.ready,.status-pill.served { color:#6ee7b7; background:rgba(16,185,129,.15); }
+    .order-card.status-sent { border-left:6px solid var(--primary); }
+    .order-card.status-served { border-left:6px solid #64748b; }
+    .order-header { gap:12px; flex-wrap:wrap; }
+    .order-time { margin-top:6px; overflow-wrap:anywhere; }
+    .order-footer { gap:12px; flex-wrap:wrap; }
+    .table-title { overflow-wrap:anywhere; }
+    .item-entry { gap:12px; }
+    .item-entry > span:last-child { white-space:nowrap; }
+    .progress { display:flex; gap:4px; margin-top:20px; }
+    .progress span { flex:1; text-align:center; font-size:.72rem; padding-top:8px; border-top:3px solid #71717a; color:var(--text-muted); }
+    .progress span.done { border-color:var(--primary); color:var(--text); }
+    .table-scroll { overflow-x:auto; }
+    table th,table td { vertical-align:top; }
+    .record-table { min-width:900px; }
+    .record-table td { overflow-wrap:anywhere; max-width:300px; }
+    .recent-row { display:flex; justify-content:space-between; align-items:center; gap:16px; border-bottom:1px solid var(--card-border); padding:16px 0; flex-wrap:wrap; }
+    .recent-row:first-child { padding-top:0; }
+    .recent-row:last-child { border-bottom:0; }
+    .menu-row { display:flex; gap:16px; align-items:center; border:1px solid var(--card-border); border-radius:12px; background:var(--card-bg); padding:16px; margin-bottom:12px; flex-wrap:wrap; }
+    .menu-emoji { overflow:hidden; flex-shrink:0; }
+    .menu-photo { width:100%; height:100%; object-fit:cover; display:block; }
+    .photo-preview { border:1px solid var(--card-border); border-radius:12px; padding:12px; background:#f7f7f9; margin-top:12px; }
+    .photo-preview img { width:100%; height:140px; display:block; object-fit:contain; border-radius:8px; }
+    .photo-preview .toolbar { margin-top:12px; }
+    .photo-status { font-size:.875rem; color:var(--text-muted); line-height:1.5; margin-top:8px; overflow-wrap:anywhere; }
+    input[type="file"] { font-size:.875rem; padding:8px; }
+    input[type="file"]::file-selector-button { padding:8px 12px; margin-right:8px; border:0; border-radius:6px; background:#e8e8ed; color:#202124; font-weight:700; cursor:pointer; }
+    #photoModalItemName { overflow-wrap:anywhere; margin-bottom:20px; }
+    .menu-copy { flex:1; min-width:180px; overflow-wrap:anywhere; }
+    .menu-copy h4 { margin-bottom:4px; }
+    .menu-emoji { width:48px; height:48px; display:grid; place-items:center; background:#f7f7f9; border-radius:8px; font-size:1.6rem; }
+    .field { margin-bottom:18px; }
+    .field label { display:block; margin-bottom:8px; color:var(--text-muted); font-size:.875rem; font-weight:700; }
+    input,select,textarea { width:100%; padding:12px; background:#f7f7f9; border:1px solid var(--card-border); border-radius:8px; color:var(--text); min-height:44px; }
+    textarea { resize:vertical; }
+    .settings-container { max-width:760px; }
+    .hint { color:var(--text-muted); line-height:1.6; font-size:.875rem; margin:12px 0; }
+    .log-entry { padding:12px 0; border-bottom:1px solid var(--card-border); overflow-wrap:anywhere; }
+    .log-entry strong { display:block; margin-bottom:4px; }
+    #webhookLog { max-height:320px; overflow-y:auto; }
+    .qr-card { background:var(--card-bg); border:1px solid var(--card-border); border-radius:16px; padding:24px; text-align:center; }
+    .qr-card h3 { margin:12px 0 4px; }
+    .qr-code { background:white; width:160px; height:160px; margin:0 auto; border-radius:8px; display:grid; place-items:center; color:#f7f7f9; }
+    .qr-code svg { width:152px; height:152px; }
+    .qr-card .toolbar { justify-content:center; margin-top:16px; }
+    .qr-card .code { margin:8px 0; color:var(--text-muted); font-family:monospace; overflow-wrap:anywhere; }
+    .two-cols { display:grid; grid-template-columns:1fr 1fr; gap:24px; }
+    .offer-card { padding:16px; border:1px solid var(--card-border); border-radius:12px; margin-bottom:12px; overflow-wrap:anywhere; }
+    .offer-card p { margin-top:8px; line-height:1.6; }
+    dialog { background:var(--card-bg); color:var(--text); border:1px solid var(--card-border); border-radius:16px; padding:24px; width:min(560px,calc(100% - 32px)); margin:auto; max-height:90vh; overflow-y:auto; }
+    dialog::backdrop { background:rgba(0,0,0,.72); }
+    .modal-header { display:flex; justify-content:space-between; align-items:center; gap:16px; margin-bottom:20px; }
+    #billPreview,.receipt { background:#fff; color:#111; padding:16px; border-radius:8px; overflow-wrap:anywhere; }
+    .receipt,.receipt * { font-family:'Courier New',monospace; }
+    .receipt-heading { text-align:center; font-weight:bold; line-height:1.5; font-size:12px; }
+    .receipt-heading strong { display:block; font-size:16px; }
+    .receipt-line { border-top:1px dashed #333; margin:12px 0; }
+    .receipt-row { display:flex; justify-content:space-between; gap:12px; font-size:13px; margin:6px 0; }
+    .receipt table { font-size:12px; }
+    .receipt td,.receipt th { padding:6px 2px; color:#111; border-color:#bbb; }
+    .receipt td:not(:first-child),.receipt th:not(:first-child) { text-align:right; }
+    #printReceipt { display:none; }
+    .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%); padding:14px 20px; background:#202124; color:#f7f7f9; border-radius:12px; box-shadow:0 4px 16px #0005; z-index:1000; max-width:calc(100% - 32px); line-height:1.5; }
+    .status-line { display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:16px; }
+    .overview-stat { margin-top:24px; }
+    @media(max-width:700px) {
+      header,main { padding:16px; }
+      .nav-tabs { width:100%; }
+      .nav-tab-btn { flex:1 1 auto; padding:10px 12px; }
+      .orders-grid { grid-template-columns:1fr; }
+      .two-cols { grid-template-columns:1fr; gap:0; }
+      .stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; }
+      .stat-card { padding:14px; }
+      .stat-card .val { font-size:1.4rem; }
+      .panel { padding:18px; }
+      .history-container,.settings-container { padding:18px; }
+      .progress span { font-size:.65rem; }
+    }
+    @media(prefers-reduced-motion:reduce) { * { transition:none ; animation:none ; } }
+    @media print {
+      @page { margin:8mm; }
+      body { background:white ; display:block; }
+      body > *:not(#printReceipt) { display:none ; }
+      #printReceipt { display:block ; color:black; max-width:80mm; margin:0 auto; }
+      #printReceipt .receipt { padding:0; border-radius:0; }
+      #printReceipt svg { max-width:65mm; height:auto; }
+    }
+
+    .access-panel {max-width:760px;margin:32px auto;padding:24px;}
+    .staff-session{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1440px;margin:16px auto;padding:0 24px;}
+    [hidden]{display:none;}.cloud-error{background:#451a1a;color:#fecaca;border:1px solid #b91c1c;margin:16px 24px;padding:16px;border-radius:8px;}
+    .alarm-dialog {max-width:520px;width:calc(100% - 32px);background:#0b0d12;color:#fff;text-align:center;border:1px solid #34363b;padding:32px 24px;}
+    .alarm-clock{font-size:64px;font-weight:300;line-height:1.2;}.alarm-dialog h2{margin:16px 0 8px;}.alarm-dialog p{margin:8px 0 24px;}
+    .alarm-controls{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:32px 0;}.alarm-controls button{width:138px;min-height:100px;border:0;border-radius:16px;background:#26282c;color:white;font:inherit;cursor:pointer;}
+    .alarm-symbol{font-size:32px;background:#4e63d5;width:72px;height:72px;display:grid;place-items:center;border-radius:50%;flex-shrink:0;}
+    .availability{min-height:44px;white-space:normal;} .status-pill.cancelled,.status-pill.rejected{background:#4c1d24;color:#fecaca;}
+    .menu-row{display:grid;grid-template-columns:64px minmax(0,1fr) auto;gap:16px;}.menu-row .toolbar{grid-column:2/-1;flex-wrap:wrap;}.menu-copy{min-width:0;overflow-wrap:anywhere;}
+    button:focus-visible,summary:focus-visible{outline:3px solid #60a5fa;outline-offset:3px;} button{min-height:44px;}
+    .order-time{overflow-wrap:anywhere;}.order-card{min-width:0;}.qr-code svg{max-width:100%;height:auto;}
+    @media(max-width:600px){.access-panel{margin:16px;padding:20px;}.staff-session{padding:0 16px;flex-wrap:wrap;}.alarm-clock{font-size:56px;}.alarm-dialog{padding:24px 16px;}.alarm-controls{gap:8px;}.alarm-controls button{width:100px;font-size:14px;}.alarm-symbol{width:56px;height:56px;}.menu-row{display:grid;grid-template-columns:48px minmax(0,1fr);padding:16px;}.menu-row>div:nth-child(3){grid-column:2;}.menu-row .toolbar{grid-column:1/-1;}.progress{display:none;}.toolbar{flex-wrap:wrap;}.cloud-error{margin:16px;}}
+
+ .record-controls{display:flex;flex-wrap:wrap;justify-content:space-between;gap:16px;margin:24px 0;} .record-controls .toolbar{align-items:center;} .record-controls input{width:auto;min-height:44px;}
+ .song-card{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:24px;margin-bottom:16px;background:#ffffff;border:1px solid #e8e8ed;border-radius:12px;}.song-card>div{min-width:0;overflow-wrap:anywhere;}.song-card h3{margin-bottom:4px;}.song-position{font-weight:800;color:#fbbf24;font-size:20px;}
+ @media(max-width:600px){.song-card{display:block;padding:20px;}.song-card .toolbar{margin-top:16px;}.record-controls{display:block;}.record-controls>.toolbar{margin-bottom:16px;}.record-controls input{max-width:100%;}.record-table td,.record-table th{font-size:14px;}}
+  .song-played{opacity:.9;border-color:#25684f;}.played-check{color:#6ee7b7;font-weight:800;}.song-played h3{display:flex;align-items:center;gap:8px;}
+
+.background-alert-panel[hidden]{display:none;}.background-alert-panel{display:flex;align-items:center;justify-content:space-between;gap:24px;border:1px solid #71717a;border-radius:10px;padding:20px 24px;background:#ffffff;margin:0 0 24px;}.background-alert-panel strong{font-size:16px;}.background-alert-panel p{font-size:14px;line-height:1.55;color:#cbd5e1;margin:8px 0 0;max-width:700px;}.background-alert-panel p[data-error=true]{color:#fda4af;}.background-alert-panel button{flex-shrink:0;max-width:100%;}@media(max-width:700px){.background-alert-panel{align-items:flex-start;flex-direction:column;padding:20px;gap:16px;}}
+.compact-alerts{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}.compact-alerts p{color:#fda4af;max-width:480px;font-size:14px;line-height:1.5;}.compact-alerts[hidden]{display:none;}
+</style>
+  <link rel="stylesheet" href="call-requests.css?v=yummy-46">
+<link rel="stylesheet" href="tables.css?v=yummy-46">
+<style>.reserved-staff-alert{padding:16px;border:1px solid #f59e0b;border-radius:12px;color:#fde68a;background:#422006;margin-bottom:20px;}</style><style>#managerMenuList .menu-row{display:flex;align-items:center;justify-content:space-between;gap:16px}#managerMenuList .menu-copy{flex:1;min-width:0}#managerMenuList .menu-copy p{white-space:nowrap;margin-top:8px}#managerMenuList .menu-row button{flex-shrink:0;white-space:nowrap}</style><style>.device-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px;margin:16px 0}.device-card{min-width:0;padding:18px;border:1px solid #71717a;border-radius:12px;background:#f7f7f9}.device-card h4{margin:0 0 12px}.device-card p{margin:8px 0;overflow-wrap:anywhere;font-size:14px;line-height:1.5}.device-card summary{cursor:pointer;margin:12px 0}.device-blocked{border-color:#f87171}#retentionForm input{display:block;width:100%;margin:8px 0 16px}#managerMenuList .menu-row{flex-direction:column;align-items:stretch}#managerMenuList .toolbar{flex-wrap:wrap}#managerMenuList .menu-row button{white-space:normal}#alertSetupModal p{line-height:1.6;margin:16px 0}</style><style>#taxForm label{display:block;margin:12px 0}#taxForm .tax-switch{display:flex;align-items:center;gap:12px;font-weight:700}#taxForm #taxEnabled{width:24px;height:24px;min-height:24px;padding:0;accent-color:#e23744;flex-shrink:0}#taxForm select,#taxForm input[type=number]{margin-top:8px}#adminMenuList .menu-row>label{display:block;flex:1 0 100%;min-width:0}#adminMenuList [data-dish-category]{display:block;max-width:100%;margin-top:8px}#categoryList .table-management-card{margin-bottom:12px}#categoryList h4{overflow-wrap:anywhere}#categoryList button{margin-top:12px}</style><style>.waiter-permission{display:flex;align-items:center;gap:12px;margin:16px 0}.waiter-permission input{width:24px;height:24px;min-height:24px;flex-shrink:0;accent-color:#e23744}#waiterPermissionsForm button{margin-top:12px}</style><link rel="stylesheet" href="request-ring.css?v=yummy-46"><style>#adminMenuList .menu-row>label{flex:0 0 100%;width:100%}#adminMenuList [data-dish-category]{width:100%;min-width:180px}#managerDevicesAccessPanel input{accent-color:#e23744}.device-card details[open]{border-top:1px solid #71717a;margin-top:12px}.device-card button{margin-top:10px}</style><link rel="stylesheet" href="yaar-theme.css?v=yummy-46"><link rel="stylesheet" href="dark-theme.css?v=yummy-46"><link rel="stylesheet" href="device-layouts.css?v=yummy-46"><link rel="stylesheet" href="analytics.css?v=yummy-46"><link rel="stylesheet" href="yummy-momo.css?v=yummy-46"><link rel="stylesheet" href="menu-customization.css?v=yummy-46"><link rel="stylesheet" href="release38.css?v=yummy-46"><link rel="stylesheet" href="release39.css?v=yummy-46"><link rel="stylesheet" href="release42.css?v=yummy-46"><link rel="stylesheet" href="release43.css?v=yummy-46">
+<link rel="manifest" href="kitchen.webmanifest">
+<meta name="theme-color" content="#202124">
+<link rel="icon" type="image/png" href="app-icons/logo-v2-192.png">
+<link rel="apple-touch-icon" href="app-icons/logo-v2-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="pwa-install.js" defer></script>
+<link rel="stylesheet" href="table-names.css?v=yummy-46">
+<link rel="stylesheet" href="experience46.css?v=yummy-46">
+<link rel="stylesheet" href="custom48.css?v=48"><link rel="stylesheet" href="release49.css?v=49"><link rel="stylesheet" href="release51.css?v=51"></head>
+<body class="staff-site dark-site">
+  <header>
+    <div class="header-left">
+      <div class="staff-brand"><img class="brand-logo" src="yummy-momo-logo.webp?v=yummy-44" alt="Yummy Momo logo"><strong>Yummy Momo</strong></div><h1>Kitchen Display &amp; Orders</h1>
+      <div class="badge-live"><span style="width:6px;height:6px;background:#10b981;border-radius:50%"></span><span id="syncBadge">Sign in</span></div>
+    </div>
+    <div class="staff-header-actions"><button id="headerCallWaiter" type="button" class="secondary-btn" onclick="openStaffCall()" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#bell"></use></svg> Call waiter</button><details id="staffAccount" class="staff-account" hidden><summary><span class="account-avatar" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3Z"/></svg></span><span><strong id="staffAccountRole">Admin</strong><small>Signed in</small></span><svg class="account-chevron" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m3 6 5 5 5-5"/></svg></summary><div class="account-menu"><button id="themeToggle" class="secondary-btn" type="button" onclick="KitchenOps.theme()">Use light theme</button><button class="secondary-btn" type="button" onclick="YummyContact.open()">Contact us</button><button id="dashboardSignOut" class="danger-btn" type="button" onclick="signOutStaff()">Sign out</button><section id="kitchenDeviceTools" class="kitchen-device-tools" hidden aria-label="Tablet and device controls"><div class="toolbar"><button id="volumeTestButton" class="secondary-btn" type="button" onclick="KitchenOps.volumeTest()">Volume test · all alarms</button><button id="volumeStopButton" class="danger-btn" type="button" onclick="RestaurantAlerts.stopVolumeTest()" hidden>Stop test</button><button id="wakeLockButton" class="secondary-btn" type="button" aria-pressed="false" onclick="KitchenOps.toggleWake()">Keep screen awake</button></div><p id="deviceToolsStatus" role="status"></p></section></div></details></div>
+    <nav class="nav-tabs" id="managerNav" aria-label="Staff navigation" hidden>
+      <button class="nav-tab-btn active" id="tabLiveBtn" onclick="switchTab('live')"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#clipboard"></use></svg><span>Pending Orders (<span id="activeOrdersBadge">0</span>)</span></button>
+      <button class="nav-tab-btn" id="tabBillingBtn" onclick="switchTab('billing')">Billing</button><button class="nav-tab-btn" id="tabHistoryBtn" onclick="switchTab('history')"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#history"></use></svg>Order Records</button>
+      <button class="nav-tab-btn" id="tabDashboardBtn" onclick="switchTab('dashboard')"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#grid"></use></svg>Dashboard</button>
+      <button class="nav-tab-btn" id="tabRequestsBtn" onclick="switchTab('requests')"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#chat"></use></svg><span>Requests (<span id="requestsBadge">0</span>)</span></button>
+      <button class="nav-tab-btn" id="tabTablesBtn" onclick="switchTab('tables')"><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#plate"></use></svg>Tables</button>
+      <button class="nav-tab-btn" id="tabDevicesBtn" onclick="switchTab('devices')" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#device"></use></svg>Customer devices</button><button class="nav-tab-btn" id="tabMenuBtn" onclick="switchTab('menu')" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#book"></use></svg>Menu</button><button class="nav-tab-btn" id="tabStocksBtn" onclick="switchTab('stocks')" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#grid"></use></svg>Stocks</button><button class="nav-tab-btn" id="tabManagementBtn" onclick="switchTab('management')" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#settings"></use></svg>Management</button>
+      <button class="nav-tab-btn" id="tabNotificationsBtn" onclick="switchTab('notifications')" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#bell"></use></svg><span>Notifications (<span id="securityUnread">0</span>)</span></button>
+    </nav>
+  </header>
+
+  <section id="loginPanel" class="panel access-panel">
+    <h2 id="loginTitle">Admin / manager sign-in</h2>
+    <p class="muted">Sign in with your registered staff email and password.</p>
+    <form id="staffLoginForm" onsubmit="event.preventDefault();signInStaff()" style="margin-top:24px;">
+      <div class="field"><label for="staffEmail">Staff email</label><input type="email" id="staffEmail" autocomplete="username" required maxlength="254"></div>
+      <div class="field"><label for="staffPassword">Password</label><input type="password" id="staffPassword" autocomplete="current-password" required></div>
+      <button id="staffSignInButton" class="primary-btn" type="submit">Sign in</button>
+    </form>
+    <form id="adminMfaForm" hidden onsubmit="StaffAuth.verify(event)" style="margin-top:24px">
+      <h3 id="adminMfaTitle">Admin authenticator verification</h3>
+      <p id="adminMfaHelp" class="hint">Use Google Authenticator, Microsoft Authenticator or another compatible app.</p>
+      <div id="adminMfaSetup" hidden>
+        <button id="adminMfaEnroll" class="primary-btn" type="button" onclick="StaffAuth.enroll()">Set up authenticator</button>
+        <div id="adminMfaQrPanel" hidden style="margin:16px 0">
+          <p>In your authenticator app choose Add account → Scan a QR code. Keep this setup private.</p>
+          <img id="adminMfaQr" alt="Private authenticator enrollment QR" width="240" height="240" style="max-width:100%;height:auto;background:white;border-radius:12px;padding:8px">
+          <details><summary>Cannot scan? Enter the setup key manually</summary><code id="adminMfaSecret" style="display:block;overflow-wrap:anywhere;user-select:all;margin:12px 0"></code><p class="hint">Choose Time-based (TOTP). Never share this key or screenshot.</p></details>
+        </div>
+      </div>
+      <div id="adminMfaVerifyPanel" hidden>
+        <label for="adminMfaFactor">Authenticator</label><select id="adminMfaFactor"></select>
+        <label for="adminMfaCode">Six-digit authenticator code</label><input id="adminMfaCode" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]{6}" maxlength="6" required>
+        <button id="adminMfaVerify" class="primary-btn" type="submit" style="margin-top:16px">Verify and sign in</button>
+      </div>
+      <div class="toolbar" style="margin-top:16px"><button id="adminMfaRetry" class="secondary-btn" type="button" onclick="StaffAuth.retry()">Refresh verification options</button><button class="secondary-btn" type="button" onclick="StaffAuth.cancel()">Back to sign-in</button></div>
+      <p class="hint">No email code is sent. Lost your authenticator? Contact the Supabase project owner; there is no password-only admin bypass.</p>
+    </form><p id="loginStatus" class="hint" role="status"></p>
+  </section>
+  <div class="staff-session" id="staffSession" hidden><span id="staffIdentity"></span></div>
+  <div class="cloud-error" id="cloudError" role="status" hidden></div>
+  <main id="staffMain" hidden><div id="reservedStaffAlert" class="reserved-staff-alert" role="alert" hidden></div>
+    <section id="liveSection">
+      <div class="page-tools"><h2>Pending Orders</h2><div class="toolbar"><button class="secondary-btn" id="orderSoundButton" onclick="toggleOrderSound()" aria-pressed="false">Enable order sound</button></div></div>
+
+      <div class="filters" id="orderFilters" aria-label="Order status filters"></div>
+      <div id="cancelledViewInfo" class="cancelled-view-info" hidden>Cancelled orders stay here for 6 hours after cancellation, then leave this temporary view automatically. Full records remain in Order Records; no orders are deleted.<p id="cancelledStatus" role="status"></p></div><div class="orders-grid" id="ordersGrid"></div>
+<div id="cancelledPagination" class="cancelled-pagination" hidden><button class="secondary-btn" id="cancelledPrevious" type="button" onclick="pageCancelledOrders(-1)">Previous</button><span id="cancelledPageLabel" role="status"></span><button class="secondary-btn" id="cancelledNext" type="button" onclick="pageCancelledOrders(1)">Next</button></div>
+    </section>
+    <section id="historySection" class="history-container" hidden>
+      <div class="page-tools"><div><h2>Order Records</h2></div><button class="secondary-btn" id="recordsExportButton" onclick="exportCurrentRecords()">Export CSV</button></div>
+      <div class="record-controls"><div class="toolbar"><button id="periodDay" class="primary-btn" onclick="setRecordPeriod('day')">Day</button><button id="periodMonth" class="secondary-btn" onclick="setRecordPeriod('month')">Month</button></div><div class="toolbar"><label for="recordDate">Choose a past period (optional)</label><input type="date" id="recordDate" onchange="selectRecordDate()"><button class="secondary-btn" onclick="followCurrentPeriod()">Current period</button></div></div>
+      <p id="recordPeriodLabel" class="hint"></p>
+      <div class="record-subtabs" role="group" aria-label="Record view"><button id="ordersViewButton" class="primary-btn" onclick="setRecordsView('orders')" aria-pressed="true">Order records</button><button id="dishViewButton" class="secondary-btn" onclick="setRecordsView('dishes')" aria-pressed="false">Dish sales</button></div>
+      <div id="ordersRecordsView"><div class="toolbar" style="margin-bottom:16px;"><label for="recordStatusFilter">Order status</label><select id="recordStatusFilter" onchange="selectRecordStatus()" style="width:auto;"><option>All</option><option>Served</option><option>Cancelled</option></select></div>
+
+      <div class="stats-row">
+        <div class="stat-card"><h4>Total Orders</h4><div class="val" id="statTotalOrders">0</div></div>
+        <div class="stat-card"><h4>Order value</h4><div class="val" id="statTotalRevenue">₹0</div></div>
+        <div class="stat-card"><h4>Completed Orders</h4><div class="val" id="statCompletedOrders">0</div></div>
+      </div>
+      <div class="table-scroll"><table class="record-table"><thead><tr><th>Time</th><th>Order ID</th><th>Table</th><th>Items</th><th>Notes</th><th>Total</th><th>Payment</th><th>Status</th><th>Actions</th></tr></thead><tbody id="historyTableBody"></tbody></table></div>
+      <div class="toolbar" style="margin-top:20px;"><button id="recordsPrevious" class="secondary-btn" onclick="changeRecordPage(-1)">Previous page</button><span id="recordsPageLabel" class="hint"></span><button id="recordsNext" class="secondary-btn" onclick="changeRecordPage(1)">Next page</button></div>
+      </div>
+      <div id="dishRecordsView" hidden>
+        <div class="dish-report-controls"><label>Report<select id="dishReportMode" onchange="changeDishReport()"><option value="dishes">Top dishes in period</option><option value="daily">Daily dish sales</option></select></label><label>Sort by<select id="dishReportSort" onchange="changeDishReport()"><option value="quantity">Most sold</option><option value="revenue">Highest item revenue</option><option value="name">Dish name</option></select></label><span class="report-basis">Served orders · order date (India) · excluding tax</span></div>
+        <p id="dishSalesStatus" role="status" aria-live="polite"></p>
+        <div class="table-scroll"><table class="dish-sales-table"><thead><tr><th>Rank</th><th>Date / period</th><th>Dish / size</th><th>Quantity sold</th><th>Orders</th><th>Item revenue</th></tr></thead><tbody id="dishSalesBody"></tbody></table></div>
+        <div class="toolbar report-pagination"><button id="dishSalesPrevious" class="secondary-btn" onclick="pageDishSales(-1)">Previous page</button><span id="dishSalesPage"></span><button id="dishSalesNext" class="secondary-btn" onclick="pageDishSales(1)">Next page</button></div>
+      </div>
+    </section>
+    <section id="dashboardSection" hidden>
+      <div class="page-tools"><div><h2>Sales analytics</h2></div><div class="muted"><span id="adminDate"></span> · <span id="adminTime"></span></div></div>
+      <div class="stats-row analytics-live-summary"><div class="stat-card"><h4>Live pending orders</h4><div class="val" id="statActiveOrders">0</div></div><div class="stat-card"><h4>Live in kitchen</h4><div class="val" id="statInKitchen">0</div></div></div>
+      <div class="analytics-controls" role="group" aria-label="Analytics period"><button id="analyticsday" class="primary-btn" type="button" aria-pressed="true" onclick="pickAnalyticsPeriod('day')">Today</button><button id="analyticsmonth" class="secondary-btn" type="button" aria-pressed="false" onclick="pickAnalyticsPeriod('month')">This month</button><label for="analyticsReference">Or choose date / month<input id="analyticsReference" type="date" min="2000-01-01" max="2100-12-31"></label><button class="secondary-btn" type="button" onclick="applyAnalyticsReference()">Apply</button><button class="secondary-btn" id="analyticsRefresh" type="button" onclick="refreshSalesAnalytics(true)">Refresh analytics</button><button class="secondary-btn" id="analyticsExport" type="button" onclick="exportSalesAnalytics()" disabled>Export analytics CSV</button></div>
+      <p id="analyticsStatus" class="analytics-status" role="status"></p>
+      <div id="analyticsResults" hidden><h3 id="analyticsRange" class="analytics-range"></h3><div id="analyticsMetrics" class="analytics-metrics"></div>
+      <div class="analytics-sections">
+       <section class="panel analytics-wide"><h3>Sales trend</h3><p class="analytics-section-intro">Item sales excluding tax, by hour / day / month. Hover a bar for exact values, or open the data table. Future buckets are faded, not forecasts.</p><div id="analyticsTrend" class="analytics-chart-scroll"></div><details class="analytics-trend-data"><summary>Exact trend data</summary><div id="analyticsTrendTable"></div></details></section>
+       <section class="panel"><h3>Order outcomes</h3><p class="analytics-section-intro">All orders placed in the selected period, including non-sales outcomes.</p><div id="analyticsStatuses"></div></section>
+       <section class="panel"><h3>Sales by weekday</h3><p class="analytics-section-intro">Total item sales per weekday, not daily averages.</p><div id="analyticsWeekdays"></div></section>
+       <section class="panel analytics-wide"><h3>Dish &amp; size performance</h3><p class="analytics-section-intro">All sold dishes, ranked by item sales. Quantities and saved selling prices only; tax is reported at bill level.</p><div id="analyticsDishes"></div></section>
+       <section class="panel"><h3>Category sales</h3><div id="analyticsCategories"></div></section>
+       <section class="panel"><h3>Size sales</h3><div id="analyticsSizes"></div></section>
+       <section class="panel"><h3>Table performance</h3><div id="analyticsTables"></div></section>
+       <section class="panel"><h3>Sales by hour of day</h3><p class="analytics-section-intro">Total served item sales grouped by order placement hour in India time.</p><div id="analyticsHours" class="analytics-bars-scroll"></div></section>
+       <section class="panel analytics-wide"><div class="page-tools"><h3>Recent period orders</h3><button class="secondary-btn" type="button" onclick="setFilter('all')">Open order records</button></div><div id="recentOrdersList"></div></section>
+      </div></div>
+    </section>
+    <section id="requestsSection" hidden>
+      <div class="page-tools"><div><h2>Requests</h2></div><div class="toolbar"><section id="backgroundAlertPanel" class="compact-alerts" hidden aria-label="Request alerts"><button id="backgroundAlertButton" type="button" aria-pressed="false" class="secondary-btn">Request alerts</button><p id="backgroundAlertStatus" role="status" hidden></p></section><button class="secondary-btn" id="soundButton" onclick="toggleSound()">Enable request sound</button><button class="secondary-btn" onclick="document.getElementById('alertSetupModal').showModal()">Alert setup / test</button></div></div>
+      <div id="kitchenRequests"></div>
+    </section>
+    <section id="devicesSection" hidden><h2>Customer devices</h2><section id="managerDeviceAccessPanel" class="panel" hidden><h3>Manager access</h3><label class="waiter-permission"><input id="managerDevicesAccess" type="checkbox" disabled onchange="saveManagerDeviceAccess()"> Allow managers to view and block/unblock customer devices</label><p id="managerDevicesAccessStatus" role="status"></p></section>      <section class="panel" aria-labelledby="devicesHeading"><div class="page-tools"><div><h3 id="devicesHeading">Saved browser profiles</h3></div><button class="secondary-btn" onclick="refreshCustomerDevices()">Refresh devices</button></div>
+      <div class="toolbar"><label>Sort by <select id="deviceSort" onchange="changeDeviceSort()"><option value="date">Date first seen</option><option value="edited">Time edited</option><option value="orders">Number of orders</option><option value="seen">Last seen</option></select></label><label>Direction <select id="deviceDirection" onchange="changeDeviceSort()"><option value="desc">Newest / highest first</option><option value="asc">Oldest / lowest first</option></select></label></div><p id="devicesSummary" class="hint" hidden></p><p id="devicesStatus" role="status"></p><div id="customerDevicesList" class="device-grid"></div><div class="toolbar"><button id="devicesPrevious" class="secondary-btn" onclick="pageCustomerDevices(-1)">Previous</button><span id="devicesPage" class="hint"></span><button id="devicesNext" class="secondary-btn" onclick="pageCustomerDevices(1)">Next</button></div></section></section>
+    <section id="tablesSection" hidden><h2>Table setup &amp; QR codes</h2><div id="tableAdminSetup" hidden><form id="tableAddForm" class="toolbar"><label for="newTableNumber">Table name</label><input id="newTableNumber" placeholder="e.g. Garden 1" maxlength="60" required aria-describedby="tableNameHelp"><button class="primary-btn" type="submit">Add table</button></form><p id="tableNameHelp" class="table-name-help">Choose any unique name (up to 60 characters). Renaming updates connected screens; existing QR links stay valid.</p></div><p id="tableMessage" role="status"></p><div id="tablesGrid" class="tables-grid"></div></section>
+    <section id="stocksSection" hidden aria-labelledby="stocksHeading"><div class="page-tools"><div><h2 id="stocksHeading">Stocks</h2></div><button class="secondary-btn" type="button" onclick="refreshStocks()">Refresh stocks</button></div>
+    
+    <div class="stock-filters"><label>Search stock<input id="stockSearch" type="search" placeholder="Dish or size" oninput="renderStocks()"></label><label>Category<select id="stockCategory" onchange="renderStocks()"><option value="All">All categories</option></select></label><label>Show<select id="stockFilter" onchange="renderStocks()"><option value="all">All stock</option><option value="tracked">Tracked only</option><option value="out">Sold out</option><option value="untracked">Not tracked</option></select></label><label>Sort<select id="stockSort" onchange="renderStocks()"><option value="quantity">Most stock first</option><option value="name">Name</option><option value="value">Highest stock value</option></select></label></div>
+    <p id="stocksStatus" role="status" aria-live="polite"></p><div id="stockSummary" class="stock-summary" hidden></div><section class="stock-overview panel"><div><h3>Top stock remaining</h3></div><div id="stockOverview"></div></section><div id="stockList" class="stock-list"></div>
+    </section>
+    <section id="menuSection" hidden><div class="page-tools"><h2>Menu</h2></div><div class="record-subtabs menu-subtabs" role="group" aria-label="Menu views"><button id="menuItemsTab" class="primary-btn" type="button" aria-pressed="true" onclick="setMenuView('items')">Menu items</button><button id="orderCategoriesTab" class="secondary-btn" type="button" aria-pressed="false" onclick="openCategoryArrangement()">Order of categories</button></div><div id="menuItemsView"><div class="staff-menu-filters"><label>Search dishes<input id="staffMenuSearch" type="search" placeholder="Name, category or description" oninput="filterStaffMenu()"></label><label>Category<select id="staffMenuCategory" onchange="filterStaffMenu()"><option value="All">All categories</option></select></label><label>Availability<select id="staffMenuAvailability" onchange="filterStaffMenu()"><option value="all">All dishes</option><option value="available">Available</option><option value="unavailable">Unavailable</option></select></label><button class="secondary-btn" type="button" onclick="clearStaffMenuFilters()">Clear filters</button></div><p id="staffMenuCount" class="hint" role="status"></p><div id="adminMenuPanel" hidden><section class="panel"><div class="page-tools"><div><h3>Menu Items</h3></div><button class="primary-btn" onclick="showAddItemModal()">+ Add Item</button></div><div id="adminMenuList"></div></section></div><div id="managerMenuPanel" hidden><div id="managerMenuList"></div></div></div><section id="categoryArrangementView" class="panel" hidden><h3 id="layoutTitle">Order of categories</h3><p class="hint">Set which category appears first. Use arrows or enter a position, then Save arrangement. All, Best Sellers and Recommended remain fixed shortcuts.</p><select id="layoutGroup" hidden aria-label="Category arrangement"></select><ol id="layoutRows" class="layout-rows"></ol><p id="layoutStatus" role="status"></p><div class="toolbar"><button id="layoutSave" class="primary-btn" onclick="saveMenuArrangement()">Save arrangement</button><button class="secondary-btn" onclick="reloadMenuArrangement()">Reload</button></div></section></section>
+    <section id="notificationsSection" hidden><div class="page-tools"><h2>Notifications</h2><button id="notificationSoundButton" class="secondary-btn" type="button" onclick="RestaurantAlerts.toggleNotifications()">Enable notification sound</button></div><section class="panel"><div class="page-tools"><h3>Low stock · 5% or less</h3><div class="toolbar"><button class="secondary-btn" onclick="refreshStockNotifications()">Refresh stock alerts</button><button class="secondary-btn" onclick="markStockNotification(null)">Mark stock alerts read</button></div></div><p id="stockNotificationsStatus" role="status"></p><div id="stockNotificationsList" class="device-grid"></div><div class="toolbar"><button id="stockNotificationsPrevious" class="secondary-btn" onclick="pageStockNotifications(-1)">Previous</button><span id="stockNotificationsPage"></span><button id="stockNotificationsNext" class="secondary-btn" onclick="pageStockNotifications(1)">Next</button></div></section><section id="browserNotificationsPanel" class="panel" hidden><div class="page-tools"><h3>Blocked-browser alerts</h3><div class="toolbar"><button class="secondary-btn" onclick="refreshSecurityNotifications()">Refresh</button><button class="secondary-btn" onclick="markSecurityNotification(null)">Mark all read</button></div></div><p id="notificationsWindowInfo" hidden></p><p id="securityNotificationsStatus" role="status"></p><div id="securityNotificationsList" class="device-grid"></div><div class="toolbar"><button id="securityPrevious" class="secondary-btn" onclick="pageSecurityNotifications(-1)">Previous</button><span id="securityPage"></span><button id="securityNext" class="secondary-btn" onclick="pageSecurityNotifications(1)">Next</button></div></section></section>
+
+    <section id="billingSection" hidden></section><section id="managementSection" hidden>
+      <h2>Management</h2><section class="panel" id="stockVisibilitySettings"><h3>Stocks visibility</h3><p class="hint">Hide or show the whole Stocks section for admins and managers. Stock deductions and 24-hour loops keep running.</p><button id="toggleStocksVisibility" class="secondary-btn" type="button" aria-pressed="false" onclick="YummyStocksSettings.toggle()">Hide stocks</button><p id="stockVisibilityStatus" role="status"></p></section><form id="yummyContactSettings" class="panel" onsubmit="YummyContact.save(event)"><h3>Contact information</h3><p class="hint">Shown in Contact us in the Admin / Manager account menu.</p><label>Contact name<input id="contactName" maxlength="80" autocomplete="name"></label><label>Phone number<input id="contactPhone" type="tel" maxlength="40" autocomplete="tel" placeholder="Enter your contact number"></label><label>Additional contact details<textarea id="contactDetails" maxlength="500"></textarea></label><label class="waiter-permission"><input id="manualWaiterAccess" type="checkbox"> Allow private waiter-link users to create manual bills</label><button id="contactSave" class="primary-btn" type="submit">Save contact &amp; billing access</button><p id="contactSettingsStatus" role="status"></p></form><form class="panel" id="alertPreferencesForm" onsubmit="RestaurantAlerts.save(event)"><h3>Alarm sounds</h3><div class="alert-sound-fields"><div><label for="ordersSoundPreset">Incoming orders</label><select id="ordersSoundPreset"><option value="chime">Rising chime</option><option value="doorbell">Ding-dong</option><option value="bell">Bell</option><option value="none">Muted</option></select><button class="secondary-btn" type="button" onclick="RestaurantAlerts.test('orders')">Preview</button><label>Custom alarm (this browser)<input type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/webm" onchange="AlertAudio.uploadAlarm('orders',this)"></label><p class="alert-asset-status" id="ordersCustomStatus"></p><button class="secondary-btn" type="button" onclick="AlertAudio.reset('orders')">Use built-in alarm</button></div><div><label for="waiterSoundPreset">Waiter requests</label><select id="waiterSoundPreset"><option value="chime">Rising chime</option><option value="doorbell">Ding-dong</option><option value="bell">Bell</option><option value="none">Muted</option></select><button class="secondary-btn" type="button" onclick="RestaurantAlerts.test('waiter')">Preview</button><label>Custom alarm (this browser)<input type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/webm" onchange="AlertAudio.uploadAlarm('waiter',this)"></label><p class="alert-asset-status" id="waiterCustomStatus"></p><button class="secondary-btn" type="button" onclick="AlertAudio.reset('waiter')">Use built-in alarm</button></div><div><label for="notificationSoundPreset">Notification alerts</label><select id="notificationSoundPreset"><option value="chime">Rising chime</option><option value="doorbell">Ding-dong</option><option value="bell">Bell</option><option value="none">Muted</option></select><button class="secondary-btn" type="button" onclick="RestaurantAlerts.test('notification')">Preview</button><label>Custom alarm (this browser)<input type="file" accept="audio/mpeg,audio/wav,audio/ogg,audio/webm" onchange="AlertAudio.uploadAlarm('notification',this)"></label><p class="alert-asset-status" id="notificationCustomStatus"></p><button class="secondary-btn" type="button" onclick="AlertAudio.reset('notification')">Use built-in alarm</button></div></div><div class="toolbar"><button class="primary-btn" id="alertSettingsSave" type="submit">Save alert preferences</button><button class="secondary-btn" type="button" onclick="RestaurantAlerts.sync(true)">Reload preferences</button></div><p id="alertSettingsStatus" role="status"></p><p class="hint">Custom alarm tones work while the dashboard is open and visible, after the browser allows audio on each device. Custom alarm files are browser-local; clearing site data removes them. Screen-off notifications use the phone’s system sound; a website cannot guarantee custom tones or delivery when locked/closed.</p></form><section id="orderDevicePermissionPanel" class="panel" hidden><h3>Order device controls</h3><label class="waiter-permission"><input id="managerOrderDeviceAccess" type="checkbox" disabled onchange="saveOrderDevicePermission()"> Allow managers to block/unblock from order cards</label><p id="orderDevicePermissionStatus" role="status"></p></section>
+      <section id="resetControls" class="panel" hidden><h3>Permanent data resets</h3><div class="toolbar"><button class="danger-btn" onclick="openAdminReset('records')">Reset ALL order records &amp; dish sales</button><button class="danger-btn" onclick="openDishSalesReset()">Reset dish sales only</button><button id="analyticsResetButton" class="danger-btn" type="button" onclick="openAnalyticsReset()">Reset all analytics</button><button class="danger-btn" onclick="openAdminReset('devices')">Reset all customer devices</button></div></section><section class="panel"><h3>Waiter access</h3><form id="waiterPermissionsForm" onsubmit="saveWaiterPermissions(event)"><label class="waiter-permission"><input type="checkbox" id="waiterPermission_enabled"> Waiter access enabled</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_view_orders"> View active orders</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_accept_orders"> Accept pending orders</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_serve_orders"> Mark cooking orders served</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_view_requests"> View customer / counter requests</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_handle_requests"> Mark requests handled</label><label class="waiter-permission"><input type="checkbox" id="waiterPermission_alerts"> Request notifications and in-page sound</label><button class="primary-btn" id="waiterPermissionsSave">Save waiter access</button><p id="waiterPermissionsStatus" role="status"></p></form><div class="toolbar"><button class="secondary-btn" onclick="shareWaiterLink()">View / share waiter QR</button><button class="danger-btn" onclick="shareWaiterLink(true)">Revoke waiter link &amp; generate new</button></div></section>
+      <section class="panel"><h3>Bill tax</h3><form id="taxForm" onsubmit="saveTaxSettings(event)"><label class="tax-switch"><input id="taxEnabled" type="checkbox"> Add tax to bills</label><div class="two-cols"><label>Tax type<select id="taxMode"><option value="percent">Percentage (%)</option><option value="fixed">Fixed rupees per order (₹)</option></select></label><label>Tax rate / amount<input id="taxValue" type="number" min="0" max="100000" step="0.01" required></label></div><button id="taxSave" class="primary-btn">Save tax settings</button><p id="taxStatus" role="status"></p></form></section>
+      <section class="panel"><h3>Dish categories</h3><form class="toolbar" id="categoryForm" onsubmit="addDishCategory(event)"><label>Category name<input id="newCategoryName" maxlength="60" required></label><button id="categoryAdd" class="primary-btn">Add category</button></form><p id="categoryStatus" role="status"></p><div id="categoryList"></div></section>
+
+      <section class="panel"><h3>Notifications &amp; Requests reset times</h3><form id="activityRetentionForm" onsubmit="saveActivityRetention(event)"><div class="two-cols"><label>Notifications (minutes)<input id="notificationRetentionMinutes" type="number" min="1" max="10080" step="1" required></label><label>Requests list (minutes)<input id="requestRetentionMinutes" type="number" min="1" max="10080" step="1" required></label></div><button id="activityRetentionSave" class="primary-btn" type="submit">Save Notifications &amp; Requests times</button><p id="activityRetentionStatus" role="status"></p></form></section><section class="panel"><h3>Customer order reset times</h3><form id="retentionForm" onsubmit="saveRetentionSettings(event)"><div class="two-cols"><label>Order status / current orders (minutes)<input id="currentRetentionMinutes" type="number" min="1" max="10080" step="1" required></label><label>Order history (minutes)<input id="historyRetentionMinutes" type="number" min="1" max="10080" step="1" required></label></div><button id="retentionSave" class="primary-btn" type="submit">Save reset times</button><p id="retentionStatus" role="status"></p></form></section>
+
+      
+
+      <form id="footerSettingsForm" class="panel" onsubmit="saveFooterSettings(event)">
+        <h3>Menu footer — SHOI SYSTEMS</h3>
+        
+        <label class="footer-setting-toggle"><input id="footerShowCredit" type="checkbox" disabled> Show “This system is made by SHOI SYSTEMS”</label>
+        <label class="footer-setting-toggle"><input id="footerShowLink" type="checkbox" disabled> Show “Click here” link</label>
+        <label for="footerRedirectUrl">Click here destination URL</label>
+        <input id="footerRedirectUrl" type="url" maxlength="2048" placeholder="https://your-website.com" disabled>
+        
+        <button id="footerSettingsSave" class="primary-btn" type="submit" disabled>Save footer settings</button>
+        <p id="footerSettingsStatus" role="status" aria-live="polite"></p>
+      </form>
+      <form class="panel" onsubmit="saveReviewSettings(event)"><h3>Google reviews</h3><label for="reviewUrlInput">Google review link</label><input id="reviewUrlInput" type="url" maxlength="2048" placeholder="https://g.page/r/.../review" style="width:100%;margin:12px 0"><button id="reviewSettingsSave" class="primary-btn" type="submit">Save review link</button><p id="reviewSettingsStatus" role="status"></p></form>    </section>
+  </main>
+  
+  <dialog id="menuPricingModal" aria-labelledby="pricingTitle"><div class="modal-header"><h3 id="pricingTitle">Customize menu item</h3><button class="secondary-btn" type="button" onclick="document.getElementById('menuPricingModal').close()" aria-label="Close menu editor">×</button></div><p id="pricingItemName" class="hint"></p>
+    <form onsubmit="saveMenuPricing(event)">
+    <fieldset id="pricingDetails"><legend>Dish details</legend><label>Dish name<input id="pricingDishName" required maxlength="120"></label><label>Category<select id="pricingCategory" required></select></label><label>Description<textarea id="pricingDescription" maxlength="1000" rows="3"></textarea></label><label class="pricing-mode"><input id="pricingVeg" type="checkbox"> Vegetarian</label></fieldset>
+    <label class="pricing-mode"><input id="pricingUseSizes" type="checkbox" onchange="updatePricingMode()"> Offer portion sizes</label>
+    <p class="hint">Rename any size, set its price, add a new size or remove one. Changes stay private until saved. Existing orders keep their original names and prices.</p>
+    <div id="pricingSingle"><label>Single price (₹)<input id="pricingBasePrice" type="number" min="0" max="100000" step="0.01" required></label></div>
+    <div id="pricingSizes" hidden><div id="pricingSizeRows"></div><button class="secondary-btn" type="button" onclick="addPricingSize()">+ Add size</button><p class="hint">Up to 20 sizes. Renaming keeps existing stock and loops. New sizes for tracked dishes start at zero: enter stock before selling. Removed sizes stop being offered and their loops are disabled.</p></div>
+    <p id="pricingStatus" role="status" aria-live="polite"></p><div class="toolbar"><button id="pricingSave" class="primary-btn" type="submit">Save changes</button><button class="secondary-btn" type="button" onclick="document.getElementById('menuPricingModal').close()">Cancel</button></div></form></dialog>
+  <dialog id="adminResetModal" aria-labelledby="adminResetTitle"><div class="modal-header"><h3 id="adminResetTitle">Permanent reset</h3><button class="secondary-btn" type="button" onclick="closeAdminReset()">×</button></div><p id="adminResetWarning"></p><form onsubmit="submitAdminReset(event)"><label for="adminResetConfirm">Type the exact confirmation phrase shown above</label><input id="adminResetConfirm" autocomplete="off" required><p id="adminResetStatus" role="status"></p><div class="toolbar"><button class="secondary-btn" type="button" onclick="closeAdminReset()">Cancel</button><button id="adminResetSubmit" class="danger-btn" type="submit">Permanently delete</button></div></form></dialog>
+  <dialog id="alertSetupModal" aria-labelledby="alertSetupTitle"><div class="modal-header"><h3 id="alertSetupTitle">Order &amp; waiter-call alerts</h3><button class="secondary-btn" onclick="document.getElementById('alertSetupModal').close()">×</button></div><p>Tap Enable sounds &amp; notifications on each staff device and choose Allow. For locked-screen sound, allow notifications and sound for this website/browser in the phone settings, turn up notification volume, and check Do Not Disturb and battery/background restrictions.</p><p>New orders use a bright three-note chime; waiter calls use a separate ding-dong. Alert sounds are on by default; device choices persist. Use Enable sounds &amp; notifications once to unlock audio and request permission. Both custom sounds work only while this page is open and visible. Background notifications use the phone's chosen system sound. A website cannot force maximum volume, bypass silent mode or guarantee delivery when the browser is closed or force-stopped.</p><button class="primary-btn" onclick="BackgroundAlerts.setup()">Enable sounds &amp; notifications</button><button class="secondary-btn" onclick="BackgroundAlerts.test()">Test this device's notification</button><p id="notificationTestStatus" role="status"></p><p id="alertReadyStatus" class="hint" role="status"></p><p class="hint">The test checks this device's notification display/sound, not the Supabase sender or closed-browser delivery. On iPhone, web push requires an installed Home Screen web app on supported iOS.</p></dialog>
+  <dialog id="staffCallModal" aria-labelledby="staffCallTitle"><div class="modal-header"><h3 id="staffCallTitle">Call waiter</h3><button class="secondary-btn" onclick="document.getElementById('staffCallModal').close()">×</button></div><form onsubmit="sendStaffCall(event)"><label for="staffCallTable">Location</label><select id="staffCallTable" required></select><p id="staffCallStatus" role="status"></p><button class="primary-btn" id="staffCallSend">🔔 Call waiter</button></form></dialog>
+  <dialog id="addItemModal" aria-labelledby="itemModalTitle">
+    <div class="modal-header"><h3 id="itemModalTitle">Add Menu Item</h3><button class="secondary-btn" onclick="closeAddItemModal()" aria-label="Close add item dialog">×</button></div>
+    <form onsubmit="event.preventDefault();addMenuItem()">
+      <div class="field"><label for="newItemName">Item name</label><input id="newItemName" required maxlength="120"></div>
+      <div class="two-cols"><div class="field"><label for="newItemPrice">Price</label><input id="newItemPrice" type="number" min="0" step="0.01" required></div><div class="field"><label for="newItemVeg">Vegetarian</label><input id="newItemVeg" type="checkbox" checked style="width:24px;height:24px;"></div></div>
+      <div class="field"><label for="newItemCategory">Category</label><select id="newItemCategory">
+  <option value="Starters">Starters</option>
+  <option value="Main Course">Main Course</option>
+  <option value="Breads & Rice">Breads & Rice</option>
+  <option value="Drinks">Drinks</option>
+  <option value="Desserts">Desserts</option>
+</select></div>
+      <div class="field"><label for="newItemDesc">Description</label><textarea id="newItemDesc" rows="2" maxlength="1000"></textarea></div>
+      <div class="field"><label for="newItemPhoto">Item photo (optional)</label><input id="newItemPhoto" type="file" accept="image/jpeg,image/png,image/webp" onchange="chooseMenuPhoto('new',this)" aria-describedby="newItemPhotoHelp newItemPhotoStatus"><p class="hint" id="newItemPhotoHelp">JPG, PNG, or WebP · up to 10 MB. Choose a square crop, then save. Photos are resized and stored with the shared menu in Supabase.</p><p class="photo-status" id="newItemPhotoStatus" role="status"></p><div class="photo-preview" id="newItemPhotoPreview" hidden><img id="newItemPhotoImage" alt="Selected item photo preview"><div class="toolbar"><button class="secondary-btn" id="removeNewItemPhoto" type="button" onclick="removePhotoDraft('new')">Remove Photo</button></div></div></div>
+      <div class="toolbar"><button class="secondary-btn" type="button" onclick="closeAddItemModal()">Cancel</button><button class="primary-btn" id="addItemSaveButton" type="submit">Add Item</button></div>
+    </form>
+  </dialog>
+  <dialog id="itemPhotoModal" aria-labelledby="photoModalTitle">
+    <div class="modal-header"><h3 id="photoModalTitle">Item Photo</h3><button class="secondary-btn" onclick="closeItemPhotoModal()" aria-label="Close item photo dialog">×</button></div>
+    <p id="photoModalItemName"></p>
+    <form onsubmit="event.preventDefault();saveItemPhoto()">
+      <div class="field"><label for="editItemPhoto">Choose an item photo</label><input id="editItemPhoto" type="file" accept="image/jpeg,image/png,image/webp" onchange="chooseMenuPhoto('edit',this)" aria-describedby="editItemPhotoHelp editItemPhotoStatus"><p class="hint" id="editItemPhotoHelp">JPG, PNG, or WebP · up to 10 MB. Choose a square crop, then save. Photos are resized and stored with the shared menu in Supabase.</p><p id="editItemPhotoStatus" class="photo-status" role="status"></p>
+        <div class="photo-preview" id="editItemPhotoPreview" hidden><img id="editItemPhotoImage" alt="Selected item photo preview"><div class="toolbar"><button class="secondary-btn" id="removeEditItemPhoto" type="button" onclick="removePhotoDraft('edit')">Remove Photo</button></div></div>
+      </div>
+      <div class="toolbar"><button class="secondary-btn" type="button" onclick="closeItemPhotoModal()">Cancel</button><button class="primary-btn" id="saveItemPhotoButton" type="submit">Save Photo</button></div>
+    </form>
+  </dialog>
+  <dialog id="billModal" aria-labelledby="billModalTitle"><div class="modal-header"><h3 id="billModalTitle">Bill Preview</h3><button class="secondary-btn" onclick="closeBillModal()" aria-label="Close bill dialog">×</button></div><div id="billPreview"></div><div class="toolbar" style="margin-top:20px"><button class="secondary-btn" onclick="closeBillModal()">Close</button><button class="primary-btn" onclick="printBill()">Print Bill</button></div></dialog>
+  <dialog id="alarmModal" class="alarm-dialog" aria-labelledby="alarmTitle">
+    <div class="alarm-clock" id="alarmClock"></div><h2 id="alarmTitle">New order waiting</h2><p id="alarmDetails"></p>
+    <div class="alarm-controls"><button class="alarm-snooze" onclick="snoozeAlarm()">Zz<br>Snooze 2 min</button><div class="alarm-symbol" aria-hidden="true">🔔</div><button class="alarm-dismiss" onclick="dismissAlarm()">×<br>Dismiss</button></div>
+    <p class="hint">Dismiss silences these pending orders on this device. It does not cancel them.</p>
+    <button class="primary-btn" onclick="viewAlarmOrders()">View & accept orders</button>
+  </dialog>
+  <dialog id="waiterModal" aria-labelledby="waiterTitle"><div class="modal-header"><h3 id="waiterTitle">Waiter orders QR</h3><button class="secondary-btn" onclick="document.getElementById('waiterModal').close()">Close</button></div>
+    <p class="hint">Waiters scan this private QR to see active orders and customer calls without signing in. They can accept orders, mark them served and handle customer calls, but cannot open kitchen management or change menu items. Anyone with this link has those permissions, so share it only with staff.</p>
+    <input id="waiterLink" readonly aria-label="Waiter dashboard link" style="width:100%;margin:16px 0;">
+    <p class="hint" id="waiterLinkStatus" role="status"></p><div class="toolbar" id="waiterShareButtons"><button class="primary-btn" onclick="shareLinkNative()">Share link</button><button class="secondary-btn" onclick="copyWaiterLink()">Copy link</button><button class="danger-btn" id="rotateWaiterButton" onclick="shareWaiterLink(true)">Replace QR / revoke old links</button></div><div class="qr-code" id="waiterQr" hidden style="margin-top:24px;"></div>
+  </dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="printReceipt"></div>
+  <dialog id="dishSalesResetModal" aria-labelledby="dishSalesResetTitle"><form onsubmit="submitDishSalesReset(event)"><div class="modal-header"><h3 id="dishSalesResetTitle">Reset dish sales only</h3><button type="button" class="secondary-btn" onclick="closeDishSalesReset()" aria-label="Close reset">×</button></div><p>This clears ALL dates from the dish-sales report by excluding currently served orders. Original order records, bills, stock, numbering and active orders stay unchanged. Future served orders will count. This cannot be undone in this app. Export first.</p><label for="dishSalesResetConfirm">Type RESET DISH SALES</label><input id="dishSalesResetConfirm" autocomplete="off" required><p id="dishSalesResetStatus" role="status"></p><div class="toolbar"><button id="dishSalesResetSubmit" class="danger-btn" type="submit">Reset dish sales only</button><button class="secondary-btn" type="button" onclick="closeDishSalesReset()">Cancel</button></div></form></dialog>
+  <dialog id="analyticsResetModal" aria-labelledby="analyticsResetTitle"><form onsubmit="submitAnalyticsReset(event)"><div class="modal-header"><h3 id="analyticsResetTitle">Reset all analytics</h3><button type="button" class="secondary-btn" onclick="closeAnalyticsReset()" aria-label="Close analytics reset">×</button></div><p>This starts ALL dashboard analytics from zero, across Today, Month, Year, historical periods, charts and exports. Only orders placed after this reset will count. Earlier orders will not reappear even if marked served later.</p><p>Order Records, bills, the separate Dish sales report, stock, menu, customer devices and live pending/kitchen work stay unchanged. This reset cannot be undone in this app. Export analytics first if needed.</p><label for="analyticsResetConfirm">Type RESET ANALYTICS</label><input id="analyticsResetConfirm" autocomplete="off" required><p id="analyticsResetStatus" role="status"></p><div class="toolbar"><button id="analyticsResetSubmit" class="danger-btn" type="submit">Reset all analytics</button><button class="secondary-btn" type="button" onclick="closeAnalyticsReset()">Cancel</button></div></form></dialog>
+  <script src="yummy-receipt.js?v=yummy-49"></script><script src="yummy-crop.js?v=yummy-46"></script><script src="yummy-stocks-settings.js?v=yummy-46"></script><script src="yummy-contact.js?v=yummy-46"></script><script src="yummy-billing.js?v=yummy-49"></script><script src="config.js?v=yummy-46"></script>
+  <script src="menu-options.js?v=yummy-46"></script><script src="cloud.js?v=yummy-46"></script>
+  <script src="qr.js?v=yummy-46"></script>
+  <script src="staff-auth.js?v=yummy-46"></script>
+  <script src="alert-device.js?v=yummy-46"></script><script src="push-config.js?v=yummy-46"></script><script src="background-alerts.js?v=yummy-49"></script>
+  <script src="tables.js?v=yummy-51"></script><script src="device-management.js?v=yummy-46"></script><script src="call-requests.js?v=yummy-46"></script><script src="admin-controls.js?v=yummy-46"></script><script src="monthly-loyalty.js?v=yummy-46"></script><script src="request-ring.js?v=yummy-49"></script><script src="waiter-access.js?v=yummy-46"></script><script src="security-controls.js?v=yummy-46"></script><script src="alert-audio.js?v=yummy-49"></script><script src="staff-extras.js?v=yummy-51"></script><script src="stocks.js?v=yummy-46"></script><script src="dish-sales.js?v=yummy-46"></script><script src="kitchen-ops.js?v=yummy-49"></script><script src="operations-analytics.js?v=yummy-46"></script><script src="kitchen.js?v=yummy-51"></script>
+<script src="custom48.js?v=51"></script></body>
+</html>

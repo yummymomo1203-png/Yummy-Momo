@@ -1,0 +1,31 @@
+{
+  "id": "./kitchen.html",
+  "name": "Yummy Momo Kitchen & Admin",
+  "short_name": "Momo Kitchen",
+  "description": "Yummy Momo Kitchen & Admin",
+  "start_url": "./kitchen.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f9",
+  "theme_color": "#e23744",
+  "icons": [
+    {
+      "src": "./app-icons/logo-v2-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./app-icons/logo-v2-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./app-icons/logo-v2-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}
