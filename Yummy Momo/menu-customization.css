@@ -1,0 +1,21 @@
+/* Release37: custom editor only. Original Release35 appearance is untouched. */
+#menuPricingModal{width:640px;max-width:calc(100vw - 24px);max-height:90dvh;overflow:auto;box-sizing:border-box;padding:24px}
+#menuPricingModal .modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:8px}
+#menuPricingModal h3{margin:0;font-size:22px}#menuPricingModal p{line-height:1.6;margin:12px 0 20px}
+#menuPricingModal fieldset{border:1px solid #71717a;border-radius:10px;padding:16px;margin:16px 0 24px;min-width:0}
+#menuPricingModal legend{padding:0 8px}#menuPricingModal label:not(.pricing-mode){display:block;font-size:14px}
+#menuPricingModal :is(input:not([type=checkbox]),textarea,select){display:block;width:100%;box-sizing:border-box;min-height:44px;margin:8px 0 16px;padding:10px 12px;font:inherit;border:1px solid #71717a;border-radius:8px}
+#menuPricingModal .pricing-mode{display:flex;align-items:center;gap:12px;margin:16px 0;font-size:16px}
+#menuPricingModal input[type=checkbox]{width:22px;height:22px;min-height:22px;flex-shrink:0}
+#menuPricingModal .custom-size-row{display:grid;grid-template-columns:minmax(0,1fr) 132px auto;align-items:center;gap:12px;border-bottom:1px solid #71717a;padding:12px 0}
+#menuPricingModal .custom-size-row button{margin-top:6px;min-height:44px;padding:10px}
+#menuPricingModal .toolbar{display:flex;gap:12px;flex-wrap:wrap;margin-top:20px}#menuPricingModal button{min-height:44px}
+#menuPricingModal .custom-size-row input{margin-bottom:8px}#pricingStatus:empty{display:none}
+#menuPricingModal [hidden]{display:none}
+@media(max-width:550px){#menuPricingModal{padding:16px}#menuPricingModal .custom-size-row{grid-template-columns:minmax(0,1fr) 110px}#menuPricingModal .custom-size-row button{grid-column:1/-1;justify-self:start;margin:0 0 8px}}
+
+#menuPricingModal fieldset{color:inherit}
+.dark-site #menuPricingModal fieldset,.dark-site #menuPricingModal .custom-size-row{border-color:#655039}
+#menuPricingModal :focus-visible{outline:2px solid #e23744;outline-offset:3px}
+/* Custom labels can be longer than the old fixed portion names. */
+.item-size-options .pizza-size-button :is(span,small){overflow-wrap:anywhere;white-space:normal}

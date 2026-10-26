@@ -1,0 +1,20 @@
+.requests-board{--request-bg:#ffffff;--request-border:#c4a3b6;--request-text:#202124;--request-muted:#71717a;--request-accent:#202124;--request-button-text:#f7f7f9;color:var(--request-text);}
+.requests-board[data-theme=dark]{--request-bg:#ffffff;--request-border:#71717a;--request-text:#202124;--request-muted:#cbd5e1;--request-accent:#c2410c;--request-button-text:#fff;}
+.request-filters,.request-pagination{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 20px;}
+.request-filters button,.request-pagination button{min-height:44px;padding:10px 16px;border:1px solid var(--request-border);border-radius:8px;background:var(--request-bg);color:var(--request-text);font:600 14px/1.4 system-ui,sans-serif;cursor:pointer;}
+.request-filters .selected,.request-handle{background:var(--request-accent);color:var(--request-button-text);}
+.request-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr));gap:16px;}
+.request-card{min-width:0;padding:22px;border:1px solid var(--request-border);border-left:5px solid var(--request-accent);border-radius:12px;background:var(--request-bg);}
+.request-card-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;}
+.request-card-heading h3{font-size:24px;margin:0;overflow-wrap:anywhere;}
+.request-card p{font:400 14px/1.5 system-ui,sans-serif;color:var(--request-muted);margin:12px 0;}
+.request-state{padding:5px 9px;border:1px solid var(--request-border);border-radius:6px;font:650 14px/1.4 system-ui,sans-serif;}
+.request-handle{min-height:46px;padding:12px 18px;border:0;border-radius:8px;font:700 14px/1.5 system-ui,sans-serif;cursor:pointer;margin-top:8px;}
+.request-handled{border-left-color:#39805c;}
+.request-empty{padding:22px;border:1px solid var(--request-border);border-radius:12px;background:var(--request-bg);}
+.request-pagination{justify-content:flex-end;margin:20px 0 0;font:400 14px/1.5 system-ui,sans-serif;}
+.request-pagination button:disabled,.request-handle:disabled{opacity:.55;cursor:default;}
+.request-error{color:#d12a45;margin:12px 0;line-height:1.5;}
+.request-error[hidden]{display:none;}
+.requests-board button:focus-visible{outline:3px solid var(--request-border);outline-offset:3px;}
+.request-retention{font-size:14px;line-height:1.5;opacity:.8;margin:0 0 20px;}

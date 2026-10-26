@@ -1,0 +1,9 @@
+/* Display names may be longer than the immutable T-number identifier. */
+.table-title,.order-card h3,.request-card h3,.receipt p,.cart-table-label,#trackingTableLabel,#trackingOrderIdentity,.ring-locations{overflow-wrap:anywhere;min-width:0}
+.order-card .card-heading>h3,.request-card-heading>h3{min-width:0;flex:1 1 auto}
+.customer-site .table-badge{min-width:0;max-width:100%;white-space:normal}
+#tableText{min-width:0;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:760px){
+ .customer-site.customer-site .header-actions{flex-wrap:wrap}
+ .customer-site.customer-site .header-actions .table-badge{flex:0 1 auto;max-width:100%;min-width:0}
+}

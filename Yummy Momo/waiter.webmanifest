@@ -1,0 +1,31 @@
+{
+  "id": "./waiter.html",
+  "name": "Yummy Momo Waiter",
+  "short_name": "Momo Waiter",
+  "description": "Yummy Momo Waiter",
+  "start_url": "./waiter.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7f9",
+  "theme_color": "#e23744",
+  "icons": [
+    {
+      "src": "./app-icons/logo-v2-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./app-icons/logo-v2-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./app-icons/logo-v2-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ]
+}

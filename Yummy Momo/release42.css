@@ -1,0 +1,45 @@
+/* Release42: account-only setup controls and customer history theme. */
+.staff-site .account-alert-controls{display:grid;gap:10px;padding:0 0 12px;border-bottom:1px solid #80644966;min-width:0}
+.staff-site .account-alert-controls[hidden]{display:none}
+.staff-site .account-alert-controls button{min-height:48px;padding:12px;font:600 14px/1.45 system-ui,sans-serif;white-space:normal;overflow-wrap:anywhere;border-radius:10px}
+.staff-site .account-alert-controls p{margin:0;font:400 14px/1.5 system-ui,sans-serif;overflow-wrap:anywhere;color:#9c2736}
+.staff-site.dark-site .account-alert-controls p{color:#ffc0b2}
+/* Keep diagnostics in Alert setup/test, not in a persistent Requests summary. */
+.staff-site #backgroundAlertStatus{display:none}
+.customer-site #orderHistoryModal{--history-bg:#fff8ec;--history-card:#fffdf6;--history-ink:#39291c;--history-muted:#705b46;--history-line:#c5a886;box-sizing:border-box;background:var(--history-bg);color:var(--history-ink);padding:0 24px 48px;overscroll-behavior:contain;font:400 16px/1.5 system-ui,sans-serif}
+.customer-site.dark-site #orderHistoryModal{--history-bg:#111118;--history-card:#1c1712;--history-ink:#f2e7d3;--history-muted:#c9b79d;--history-line:#69523a;color-scheme:dark}
+.customer-site #orderHistoryModal .order-history-header{box-sizing:border-box;width:100%;max-width:960px;padding:28px 0 24px;gap:24px;align-items:flex-start;background:var(--history-bg);border-bottom:1px solid var(--history-line);color:var(--history-ink)}
+.customer-site #orderHistoryModal h2{font:700 32px/1.2 Georgia,serif;letter-spacing:-.5px;color:var(--history-ink)}
+.customer-site #orderHistoryModal .order-history-header p{font:400 14px/1.6 system-ui,sans-serif;color:var(--history-muted);margin:10px 0 0;max-width:55ch;overflow-wrap:anywhere}
+.customer-site #orderHistoryModal .btn-close-drawer{box-sizing:border-box;display:grid;place-items:center;position:static;width:48px;height:48px;min-height:48px;flex-shrink:0;padding:0;border:1px solid var(--history-line);border-radius:12px;background:var(--history-card);color:var(--history-ink);font:400 28px/1 system-ui,sans-serif}
+.customer-site #orderHistoryModal .order-history-body{box-sizing:border-box;max-width:960px;padding:24px 0;margin:auto}
+.customer-site #orderHistoryList{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.customer-site #orderHistoryModal .history-order-card{box-sizing:border-box;min-width:0;display:flex;flex-direction:column;gap:12px;padding:24px;border:1px solid var(--history-line);border-radius:14px;background:var(--history-card);color:var(--history-ink);font:400 16px/1.5 system-ui,sans-serif;box-shadow:none;text-align:left;transition:border-color .15s}
+.customer-site #orderHistoryModal .history-order-card:hover{border-color:#b79163;filter:none}
+.customer-site #orderHistoryModal .history-order-card:focus-visible,.customer-site #orderHistoryModal .btn-close-drawer:focus-visible{outline:3px solid #b58a53;outline-offset:3px}
+.customer-site #orderHistoryModal .history-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:0}
+.customer-site #orderHistoryModal .history-card-top strong{font-size:18px;overflow-wrap:anywhere;color:var(--history-ink)}
+.customer-site #orderHistoryModal .history-card-status{font:600 14px/1.4 system-ui,sans-serif;padding:5px 10px;border-radius:6px;background:#e9dcc8;color:#513b24;overflow-wrap:anywhere;max-width:100%}
+.customer-site.dark-site #orderHistoryModal .history-card-status{background:#3a2e20;color:#eed4a9}
+.customer-site #orderHistoryModal [data-order-status="Served"] .history-card-status{background:#dfede1;color:#245b36}
+.customer-site.dark-site #orderHistoryModal [data-order-status="Served"] .history-card-status{background:#183128;color:#b0e2c1}
+.customer-site #orderHistoryModal [data-order-status="Rejected"] .history-card-status,.customer-site #orderHistoryModal [data-order-status="Cancelled"] .history-card-status{background:#f5e1dc;color:#852e29}
+.customer-site.dark-site #orderHistoryModal [data-order-status="Rejected"] .history-card-status,.customer-site.dark-site #orderHistoryModal [data-order-status="Cancelled"] .history-card-status{background:#381d1a;color:#ffc0b2}
+.customer-site #orderHistoryModal .history-card-date,.customer-site #orderHistoryModal .history-card-reason{font-size:14px;color:var(--history-muted);overflow-wrap:anywhere}
+.customer-site #orderHistoryModal .history-card-items{display:block;overflow-wrap:anywhere;color:var(--history-ink);line-height:1.6}
+.customer-site #orderHistoryModal .history-card-bottom{display:flex;justify-content:space-between;align-items:center;gap:16px;margin:8px 0 0;padding-top:16px;border-top:1px solid var(--history-line);width:100%;margin-top:auto;color:var(--history-ink);font-size:14px}
+.customer-site #orderHistoryModal .history-card-bottom>span:first-child{font-weight:750;font-size:20px}
+.customer-site #orderHistoryModal .history-empty{grid-column:1/-1;padding:32px;border:1px solid var(--history-line);border-radius:14px;background:var(--history-card);color:var(--history-muted);font:400 16px/1.6 system-ui,sans-serif}
+.customer-site #historySyncMessage{color:#962e27;margin:0 0 20px;overflow-wrap:anywhere}
+.customer-site.dark-site #historySyncMessage{color:#ffc0b2}
+@media(max-width:650px){.customer-site #orderHistoryModal{padding:0 16px 32px}.customer-site #orderHistoryModal .order-history-header{padding:20px 0;gap:16px}.customer-site #orderHistoryModal h2{font-size:27px}.customer-site #orderHistoryModal .order-history-body{padding-top:20px}.customer-site #orderHistoryList{grid-template-columns:minmax(0,1fr);gap:16px}.customer-site #orderHistoryModal .history-order-card{padding:20px}.customer-site #orderHistoryModal .history-card-top strong{font-size:17px}}
+@media(prefers-reduced-motion:reduce){.customer-site #orderHistoryModal .history-order-card{transition:none}}
+/* Past-order actions and the other-order switcher must occupy their own rows. */
+.customer-site #trackingModal .tracking-actions{box-sizing:border-box;display:flex;flex-wrap:wrap;gap:12px;padding:24px 0;align-items:stretch}
+.customer-site #trackingModal .tracking-actions button{min-height:48px;margin:0;white-space:normal;line-height:1.5}
+.customer-site #trackingModal .other-orders-panel{position:static;bottom:auto;box-sizing:border-box;margin:0 auto 24px;padding:20px;border:1px solid #c5a886;border-radius:14px;box-shadow:none;background:#fff8ec;color:#39291c}
+.customer-site.dark-site #trackingModal .other-orders-panel{background:#202027;border-color:#69523a;color:#f2e7d3}
+.customer-site.dark-site #trackingModal .other-orders-heading>span,.customer-site.dark-site #trackingModal .other-order-id{color:#c9b79d}
+.customer-site #trackingModal .other-orders-heading{flex-wrap:wrap;gap:8px}
+@media(max-width:650px){.customer-site #trackingModal .tracking-actions{flex-direction:column}.customer-site #trackingModal .tracking-actions button{flex:0 0 auto;width:100%}.customer-site #trackingModal .other-orders-panel{padding:16px}}
+.customer-site.dark-site #trackingModal .tracking-header{background:#111118}
