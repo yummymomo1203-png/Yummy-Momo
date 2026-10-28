@@ -784,8 +784,8 @@
   
  .menu-label{display:inline-block;margin:4px 4px 8px 0;background:#eff6ff;color:#174278;border-radius:4px;padding:3px 8px;font-size:14px;font-weight:700;}
  </style>
-  <link rel="stylesheet" href="menu-theme.css?v=yummy-46">
-  <link rel="stylesheet" href="order-celebration.css?v=yummy-46">
+  <link rel="stylesheet" href="menu-theme.css?v=yummy-56">
+  <link rel="stylesheet" href="order-celebration.css?v=yummy-64">
 <link rel="stylesheet" href="yaar-theme.css?v=yummy-46"><link rel="stylesheet" href="dark-theme.css?v=yummy-46"><link rel="stylesheet" href="device-layouts.css?v=yummy-46"><link rel="stylesheet" href="yummy-momo.css?v=yummy-46"><link rel="stylesheet" href="menu-customization.css?v=yummy-46"><link rel="stylesheet" href="release42.css?v=yummy-46"><link rel="stylesheet" href="release43.css?v=yummy-46">
 <link rel="manifest" href="manifest.webmanifest">
 <meta name="theme-color" content="#e23744">
@@ -793,10 +793,10 @@
 <link rel="apple-touch-icon" href="app-icons/logo-v2-180.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script src="pwa-install.js" defer></script>
+<script src="pwa-install.js?v=yummy-56" defer></script>
 <link rel="stylesheet" href="table-names.css?v=yummy-46">
 <link rel="stylesheet" href="experience46.css?v=yummy-46">
-<link rel="stylesheet" href="custom48.css?v=48"><link rel="stylesheet" href="release49.css?v=49"><link rel="stylesheet" href="release51.css?v=51"></head>
+<link rel="stylesheet" href="custom48.css?v=48"><link rel="stylesheet" href="release49.css?v=54"><link rel="stylesheet" href="release51.css?v=51"><link rel="stylesheet" href="release57.css?v=58"><link rel="stylesheet" href="release59.css?v=59"></head>
 <body class="customer-site">
 
   <!-- Top Header -->
@@ -814,11 +814,12 @@
 <section id="tableAccessNotice" class="table-access-notice" role="alert" hidden></section><section id="scanExpired" class="scan-expired" role="alertdialog" aria-labelledby="scanExpiredTitle"><div><h2 id="scanExpiredTitle">Please scan your table QR</h2><p><span id="scanAccessText">Scan the QR printed on your table to open the menu.</span></p></div></section>
   <section id="home" class="menu-hero" aria-label="Restaurant menu">
     <div class="hero-copy"><span class="experience-kicker">THE GOOD FOOD CLUB</span><p class="hero-eyebrow"><span aria-hidden="true"></span> A LITTLE STEAM. A LOT OF LOVE.</p><h2 id="restaurantTagline">Our Menu</h2><p class="hero-description">Big cravings. Little pockets of happiness. Pick your favourites, we’ll bring them to your table.</p>
-      
+      <div class="customer-tools"><button type="button" id="requestSongButton" class="song-request-button" hidden>🎵 Request song</button></div>
     </div>
     <div class="hero-photo"><img src="momo-hero46.svg" alt="An illustration of freshly steamed momos" fetchpriority="high"></div>
   </section>
   <section id="waiterConfirmation" class="waiter-confirmation" role="status" aria-live="polite" hidden><svg class="ui-icon" aria-hidden="true"><use href="icons.svg#bell"></use></svg><strong id="waiterConfirmationText"></strong></section>
+  <dialog id="songModal" aria-labelledby="songRequestTitle"><form id="songRequestForm"><div class="song-modal-header"><h2 id="songRequestTitle">Request a song</h2><button type="button" class="cancel-btn" id="songRequestClose" aria-label="Close song request">×</button></div><p>Tell the staff what you would like to hear.</p><label for="songRequestText">Song name / artist</label><input id="songRequestText" maxlength="120" autocomplete="off" required placeholder="Example: song name — artist"><p id="songRequestStatus" role="status" aria-live="polite"></p><div class="toolbar"><button type="submit" id="songRequestSend" class="song-request-button">Send song request</button><button type="button" class="cancel-btn" id="songRequestCancel">Cancel</button></div></form></dialog>
   <!-- Active Order Alert (if order is placed) -->
   <div class="active-order-banner" id="activeOrderBanner" onclick="openTrackingModal()">
     <span>⚡ <b id="bannerStatusText">Order in Progress</b> (Click to track)</span>
@@ -912,7 +913,7 @@
       <div><h3 id="trackingTitle" style="font-size:1.05rem; font-weight:800;">Order Status</h3><p id="trackingOrderIdentity" class="tracking-order-identity" aria-live="polite"></p></div>
       <button class="btn-close-drawer" onclick="closeTrackingModal()" aria-label="Close order tracking">×</button>
     </div>
-    <div class="tracking-status-hero">
+    <div class="tracking-status-hero" aria-live="polite" aria-atomic="true">
       <div class="status-icon-circle" id="trackingStatusIcon">🍳</div>
       <h2 id="trackingStatusTitle">Preparing your meal</h2>
       <p id="trackingStatusSub">The kitchen is preparing your dishes with care.</p>
@@ -977,11 +978,12 @@
  </dialog>
 
   <script src="config.js?v=yummy-46"></script>
-  <script src="menu-options.js?v=yummy-46"></script><script src="cloud.js?v=yummy-46"></script>
-  <script src="order-celebration.js?v=yummy-46"></script>
+  <script src="menu-options.js?v=yummy-46"></script><script src="cloud.js?v=yummy-58"></script>
+  <script src="order-celebration.js?v=yummy-64"></script>
   <script src="reviews.js?v=yummy-46"></script>
   <script src="table-access.js?v=yummy-46"></script>
-  <script src="menu-experience.js?v=yummy-46"></script><script src="category-menu49.js?v=49"></script><script src="customer.js?v=yummy-50"></script>
+  <script src="menu-experience.js?v=yummy-46"></script><script src="category-menu49.js?v=58"></script><script src="customer.js?v=yummy-64"></script>
   <script src="customer-waiter.js?v=yummy-50"></script>
-<script src="custom48.js?v=51"></script></body>
+  <script src="customer-requests56.js?v=yummy-56"></script>
+<script src="custom48.js?v=59"></script></body>
 </html>

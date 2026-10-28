@@ -12,7 +12,7 @@ const StaffAuth=(()=>{
   const status=await Cloud.rpc('restaurant_admin_auth_status',{},true);
   if(status.role==='admin'){
    // Older database versions must never silently admit an admin without native MFA.
-   if(status.mfa_required!==true||status.verification_method!=='totp')throw Error('Release 15 database update is required. Ask the project owner to run UPDATE-15.sql.');
+   if(status.mfa_required!==true||status.verification_method!=='totp')throw Error('Release 15 database update is required. Ask the project owner to run SUPABASE/FIX-CURRENT-INSTALL.sql.');
    if(!status.verified){
     showMfa();clearSetup();el('adminMfaVerifyPanel').hidden=true;el('adminMfaSetup').hidden=true;
     const factors=await Cloud.mfaFactors(),verified=factors.filter(f=>f.status==='verified');

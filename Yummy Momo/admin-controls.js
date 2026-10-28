@@ -39,7 +39,7 @@ async function saveFooterSettings(event){
  const form=document.getElementById('footerSettingsForm'),status=document.getElementById('footerSettingsStatus');let url;
  try{url=footerWebUrl(document.getElementById('footerRedirectUrl').value);if(document.getElementById('footerShowLink').checked&&!url)throw Error('Add a website link before showing Click here.');}catch(e){status.textContent=e.message;return;}
  const args={p_show_credit:document.getElementById('footerShowCredit').checked,p_show_link:document.getElementById('footerShowLink').checked,p_url:url};footerSettingsBusy=true;for(const input of form.elements)input.disabled=true;
- try{fillFooterSettings(await Cloud.rpc('restaurant_footer_settings',args,true));status.textContent='Footer settings saved. Online menus update on their next refresh (normally within 5 seconds).';}
+ try{fillFooterSettings(await Cloud.rpc('restaurant_footer_settings',args,true));status.textContent='Footer settings saved. Online menus update on their next refresh (normally within 30 seconds).';}
  catch(e){status.textContent=e.message;}
  finally{footerSettingsBusy=false;for(const input of form.elements)input.disabled=false;}
 }

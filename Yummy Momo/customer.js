@@ -1,6 +1,7 @@
 'use strict';
 let sharedMenu=[], receipts=[], pendingAttempt=null, serverOffset=0, menuBusy=false, trackingBusy=false,placingOrder=false;
 let receiptSyncPromise=null,receiptSyncError='',historyReturnFocus=null,trackingHistoryMode=false;
+function vibrateCookingAlert(){try{navigator.vibrate?.([900,180,900,180,900]);}catch{}}
 let CURRENT_VISIT_MS=2*60*60*1000,HISTORY_KEEP_MS=3*60*60*1000,retentionLoaded=false;
 function applyCustomerRetention(settings,serverNow){if(Number.isFinite(Date.parse(serverNow)))serverOffset=Date.parse(serverNow)-Date.now();if(!settings||!Number.isInteger(settings.current_minutes)||!Number.isInteger(settings.history_minutes))return;const current=settings.current_minutes*60000,history=settings.history_minutes*60000,changed=!retentionLoaded||current!==CURRENT_VISIT_MS||history!==HISTORY_KEEP_MS;CURRENT_VISIT_MS=current;HISTORY_KEEP_MS=history;retentionLoaded=true;if(changed){pruneReceipts();renderOrderLists();if(activeOrder)renderTracking();}}
 
@@ -87,7 +88,7 @@ const RECEIPT_UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
         const size=item.sizes_enabled?selectedSizes[item.id]:null,key=cartKey(item.id,size),unitPrice=size?Number(item.size_prices[size]):item.price;
         const inCartQty=cart[key]?.qty||0;const sizeAttr=size?' data-size="'+size+'"':'';
         const imgHtml = (window.Custom48?.photoMode()==='dish' && item.image)
-          ? `<img class="item-img" src="${Cloud.esc(Cloud.safeImage(item.image))}" alt="${Cloud.esc(item.name)}" loading="lazy" decoding="async">`
+          ? `<img class="item-img" data-low-src="${Cloud.esc(Cloud.safeImage(item.image))}" alt="${Cloud.esc(item.name)}" loading="lazy" decoding="async" fetchpriority="low">`
           : `<div class="item-img" style="display:flex;align-items:center;justify-content:center;font-size:2.8rem;background:var(--soft);border-radius:12px;"><svg class="ui-icon" aria-hidden="true" style="width:42px;height:42px;color:var(--red)"><use href="icons.svg#momo"></use></svg></div>`;
 
         return `
@@ -122,6 +123,7 @@ const RECEIPT_UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12
         `;
       }).join('');
       patchMenuCards(container,markup,changedId);
+      Cloud.deferImages?.(container);
       window.Custom48?.renderCategoryPhotos(categoryPhotoItems48);
     }
 
@@ -267,7 +269,12 @@ async function syncDeviceOrders(forceAll=false){
    if(data.server_now)serverOffset=new Date(data.server_now).getTime()-Date.now();
    const sent=new Map(submitted.map(r=>[r.id,r])),rows=new Map(data.orders.filter(r=>sent.has(r.id)).map(r=>[r.id,r]));
    const unavailable=new Set(data.unavailable_ids.filter(id=>sent.has(id)));
-   receipts=receipts.filter(r=>!unavailable.has(r.id)).map(r=>rows.has(r.id)?(new Date(r.updated_at||0)>new Date(rows.get(r.id).updated_at||0)?r:{...r,...rows.get(r.id),token:sent.get(r.id).token,_statusChecked:Date.now()}):r);
+   receipts=receipts.filter(r=>!unavailable.has(r.id)).map(r=>{
+    const incoming=rows.get(r.id);if(!incoming)return r;
+    if(new Date(r.updated_at||0)>new Date(incoming.updated_at||0))return r;
+    if(incoming.status==='Cooking'&&r.status!=='Cooking')vibrateCookingAlert();
+    return {...r,...incoming,token:sent.get(r.id).token,_statusChecked:Date.now()};
+   });
    saveReceipts();
    if(activeOrder)activeOrder=receipts.find(r=>r.id===activeOrder.id)||null;
    receiptSyncError='';
@@ -292,7 +299,7 @@ async function placeOrder(){
   const row=await Cloud.rpc('restaurant_place_order_v13',{p_request_id:a.request_id,p_token:a.token,p_table:a.table,p_name:a.name,p_notes:a.notes,p_items:a.items,p_expected_total:a.expected_total,...access});
   rememberOrder(row,a.token);Cloud.remove(attemptKey());pendingAttempt=null;
   $('pendingRetry').hidden=true;cart={};$('custNotesInput').value='';syncNoteChips();handleSearch();updateCartUI();closeCartDrawer();openTrackingModal();message('Order saved. Waiting for kitchen acceptance.');
-  if(!['Cancelled','Rejected'].includes(row.status)){promptOrderReview(row.id);if(window.OrderCelebration)OrderCelebration.show(row.id);}
+  if(!['Cancelled','Rejected'].includes(row.status)){promptOrderReview(row.id);if(window.OrderCelebration)OrderCelebration.show(row.id,null,row.items);}
 
  }catch(e){$('cartOrderError').textContent=e.message;message('Order not confirmed: '+e.message+' Use “Retry original order” to safely retry the same submission.',true);
   // A definite database validation error is safe to edit/retry with a new request.

@@ -10,7 +10,7 @@ const BackgroundAlerts=(()=>{
  function paint(){if(!button)return;button.disabled=busy;button.textContent=busy?'Please wait…':enabled?'Notifications on · disable':'Enable notifications';button.setAttribute('aria-pressed',String(enabled));const setup=document.getElementById('enableAllDeviceAlerts');if(setup)setup.disabled=busy;}
  const rpc=(action,subscription)=>Cloud.rpc('restaurant_push_device',{p_kind:role,p_key:role==='waiter'?key:null,p_action:action,p_subscription:subscription},role==='kitchen');
  function decode(v){const raw=atob(v.replace(/-/g,'+').replace(/_/g,'/'));return Uint8Array.from(raw,c=>c.charCodeAt(0));}
- async function registration(){await navigator.serviceWorker.register(new URL('sw.js?v=yummy-39',location.href),{scope:new URL('./',location.href).pathname});return navigator.serviceWorker.ready;}
+ async function registration(){await navigator.serviceWorker.register(new URL('sw.js?v=yummy-55',location.href),{scope:new URL('./',location.href).pathname});return navigator.serviceWorker.ready;}
  async function existing(){const reg=await navigator.serviceWorker.getRegistration(new URL('./',location.href));return reg?await reg.pushManager.getSubscription():null;}
  async function enable(){
   if(!/^[A-Za-z0-9_-]{87}=?$/.test(publicKey()))throw Error('Permission saved. The owner must configure push-config.js and the Supabase push sender for background delivery.');
@@ -61,11 +61,11 @@ const BackgroundAlerts=(()=>{
  async function diagnostics(){
   try{const d=await Cloud.rpc('restaurant_push_diagnostics',{p_kind:role,p_key:role==='waiter'?key:null},role==='kitchen');
    const h=d.sender;let message='Notifications allowed and this device registered. ';
-   if(!d.delivery_configured)message+='Background delivery is NOT configured. Owner: complete PUSH/02-enable-delivery.sql and deploy the Release 39 sender. Foreground fallback remains available.';
+   if(!d.delivery_configured)message+='Background delivery is NOT configured. Owner: complete OWNER-OPTIONAL/PUSH/02-enable-delivery.sql and deploy the Release 39 sender. Foreground fallback remains available.';
    else if(!h?.last_run)message+='Sender configuration found, but no successful Release 39 sender run recorded. Send a real test event and check Edge Function logs.';
    else message+='Last sender run: '+new Date(h.last_run).toLocaleString()+'. Provider accepted: '+h.accepted+'; retry: '+h.retry+'; expired subscriptions: '+h.expired+'. This is not proof of delivery to this device. System volume and Do Not Disturb still apply.';
    text(message,!d.delivery_configured);return d;
-  }catch(e){text('Device registered, but delivery diagnostics failed: '+e.message+'. Run YUMMY-MOMO-39.sql and deploy the sender.',true);return null;}
+  }catch(e){text('Device registered, but delivery diagnostics failed: '+e.message+'. Run SUPABASE/YUMMY-MOMO-39.sql and deploy the sender.',true);return null;}
  }
  async function notifyRows(kind,rows){
   if(!initialized||suspended||!preference()||!supported()||Notification.permission!=='granted')return;
@@ -82,7 +82,7 @@ const BackgroundAlerts=(()=>{
     else if(kind==='stock'){title='Low stock · '+r.dish_name;body=r.remaining+' of '+r.baseline+' left. Check Stocks.';screen='notifications';}
     else if(kind==='security'){title='Blocked browser scanned · '+Cloud.tableName(r.table_number);body='Open Notifications to review this QR scan.';screen='notifications';}
     else{title=r.request_kind==='ReservedScan'?'Reserved table QR opened · '+Cloud.tableName(r.table_number):'Waiter requested · '+(r.request_kind==='Reception'?'Counter':Cloud.tableName(r.table_number));body='Open Requests to respond.';}
-    await reg.showNotification(title,{body,tag:'restaurant-event-'+kind+'-'+r.id,silent:false,renotify:false,requireInteraction:true,vibrate:[500,150,500],data:{kind:role,screen}});remember(id);
+    await reg.showNotification(title,{body,tag:'restaurant-event-'+kind+'-'+r.id,silent:false,renotify:false,requireInteraction:true,vibrate:kind==='order'?[900,180,900,180,900]:[500,150,500],data:{kind:role,screen}});remember(id);
    }catch(e){text('Foreground notification failed: '+e.message,true);}finally{pending.delete(id);}},enabled?6500:0);
   }
  }

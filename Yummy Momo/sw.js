@@ -16,7 +16,7 @@ self.addEventListener('push',event=>{
    timestamp:Date.parse(data.createdAt)||Date.now(),
    data:{url:path,kind:data.kind,screen:data.screen},
    // No silent:true. Sound/vibration depend on Android/Windows/browser notification settings.
-   vibrate:[500,150,500,150,500],
+   vibrate:eventKind==='order'?[900,180,900,180,900]:[500,150,500,150,500],
   });
   clients.forEach(c=>c.postMessage({type:'restaurant-push-delivered',kind:data.kind,event_key:eventKey}));
  })());
@@ -36,7 +36,7 @@ self.addEventListener('notificationclick',event=>{
 
 // Public content-addressed catalog photos only. Never cache RPC/Auth/order responses.
 const PHOTO_CACHE='yummy-public-photos-v46';
-const MAX_PUBLIC_MENU_PHOTOS=150; // Enough for ~100 dishes plus category banners while keeping a small footprint.
+const MAX_PUBLIC_MENU_PHOTOS=250; // Enough for a 200-dish menu plus category banners; public content-addressed photos only.
 self.addEventListener('activate',event=>event.waitUntil((async()=>{
  for(const name of await caches.keys())if(name.startsWith('yummy-public-photos-')&&name!==PHOTO_CACHE)await caches.delete(name);
 })()));
@@ -54,20 +54,20 @@ self.addEventListener('fetch',event=>{
 });
 
 // Branding is public configuration only. No credentials or private responses.
-const BRAND_CACHE48='restaurant-brand48';
+const BRAND_CACHE48='restaurant-brand48',WAITER_CONFIG56='restaurant-waiter-config56';
 self.addEventListener('message',event=>{
- if(event.data?.type!=='custom48-brand')return;
- const name=String(event.data.name||'Restaurant').slice(0,120),raw=String(event.data.icon||'');
- let icon='';try{const u=new URL(raw);if(u.protocol==='https:')icon=u.href;}catch{}
- event.waitUntil(caches.open(BRAND_CACHE48).then(cache=>cache.put(new URL('brand48.json',self.registration.scope),new Response(JSON.stringify({name,icon}),{headers:{'Content-Type':'application/json'}}))));
+ if(event.data?.type==='custom48-brand'){const name=String(event.data.name||'Restaurant').slice(0,120),raw=String(event.data.icon||'');let icon='';try{const u=new URL(raw);if(u.protocol==='https:')icon=u.href;}catch{}event.waitUntil(caches.open(BRAND_CACHE48).then(cache=>cache.put(new URL('brand48.json',self.registration.scope),new Response(JSON.stringify({name,icon}),{headers:{'Content-Type':'application/json'}}))));return;}
+ if(event.data?.type==='waiter56-config'){const appName=String(event.data.appName||'Waiter').trim().slice(0,40)||'Waiter';event.waitUntil(caches.open(WAITER_CONFIG56).then(cache=>cache.put(new URL('waiter56.json',self.registration.scope),new Response(JSON.stringify({appName}),{headers:{'Content-Type':'application/json'}}))));}
 });
 self.addEventListener('fetch',event=>{
  const u=new URL(event.request.url);if(u.origin!==self.location.origin||!/^custom-(menu|kitchen|waiter)48\.webmanifest$/.test(u.pathname.split('/').pop()))return;
  event.respondWith((async()=>{
   const name=u.pathname.split('/').pop(),kind=name.includes('kitchen')?'kitchen':name.includes('waiter')?'waiter':'menu';
   const cache=await caches.open(BRAND_CACHE48),hit=await cache.match(new URL('brand48.json',self.registration.scope));let brand={name:'Restaurant',icon:''};if(hit)brand=await hit.json();
+  let waiterName='Waiter';if(kind==='waiter'){const wc=await caches.open(WAITER_CONFIG56),wh=await wc.match(new URL('waiter56.json',self.registration.scope));if(wh){try{waiterName=String((await wh.json()).appName||'Waiter').trim().slice(0,40)||'Waiter';}catch{}}}
   const start=new URL(kind==='kitchen'?'kitchen.html':kind==='waiter'?'waiter.html':'index.html',self.registration.scope).href;
   const icons=brand.icon?[{src:brand.icon,sizes:'any',purpose:'any'}]:[{src:new URL('app-icons/logo-v2-512.png',self.registration.scope).href,sizes:'512x512',type:'image/png',purpose:'any'}];
-  return new Response(JSON.stringify({id:start,name:brand.name+(kind==='kitchen'?' · Kitchen':kind==='waiter'?' · Waiter':' · Menu'),short_name:brand.name.slice(0,24),start_url:start,scope:self.registration.scope,display:'standalone',background_color:'#fff',theme_color:'#e23744',icons}),{headers:{'Content-Type':'application/manifest+json','Cache-Control':'no-store'}});
+  const appName=kind==='waiter'?waiterName:brand.name+(kind==='kitchen'?' · Kitchen':' · Menu'),shortName=kind==='waiter'?waiterName.slice(0,24):brand.name.slice(0,24);
+  return new Response(JSON.stringify({id:start,name:appName,short_name:shortName,start_url:start,scope:self.registration.scope,display:'standalone',background_color:'#fff',theme_color:'#e23744',icons}),{headers:{'Content-Type':'application/manifest+json','Cache-Control':'no-store'}});
  })());
 });

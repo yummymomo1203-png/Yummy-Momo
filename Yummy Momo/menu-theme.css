@@ -77,3 +77,17 @@
 #categoriesBar .cat-btn{width:100%;min-width:0;max-width:100%;white-space:normal;justify-content:center;line-height:1.4;height:auto;min-height:46px;padding:10px 12px;overflow-wrap:anywhere}
 #categoriesBar .cat-btn .ui-icon{flex-shrink:0}
 @media(max-width:600px){#categoriesBar{grid-template-columns:repeat(2,minmax(0,1fr))}#categoriesBar .cat-btn{font-size:12px;padding:10px 8px;gap:6px}}
+
+
+/* Release56 song request dialog */
+#songModal{width:min(520px,calc(100vw - 28px));box-sizing:border-box;max-height:min(82vh,680px);overflow:auto;}
+.song-modal-header{display:flex;align-items:center;justify-content:space-between;gap:16px;}
+.song-modal-header h2{margin:0;}
+#songRequestForm>p{line-height:1.5;}
+#songRequestForm>label{display:block;margin:18px 0 8px;font-weight:700;}
+#songRequestText{display:block;width:100%;box-sizing:border-box;padding:12px 14px;}
+#songRequestStatus{min-height:22px;margin:12px 0;line-height:1.45;}
+#songModal .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px;}
+#songRequestSend{flex:1 1 180px;}
+#songRequestCancel{flex:0 1 auto;}
+@media(max-width:520px){#songModal{padding:22px 18px;}#songModal .toolbar>*{flex:1 1 100%;}}

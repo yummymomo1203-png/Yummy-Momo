@@ -1,0 +1,8 @@
+/* Release63: low-egress lazy staff pages. */
+.lazy-sentinel63{min-height:54px;display:grid;place-items:center;margin:14px 0;padding:12px;border:1px dashed #d8d8df;border-radius:14px;color:#6b7280;background:rgba(255,255,255,.45);font-size:.9rem;text-align:center}
+.lazy-load-footer63{display:grid;gap:8px}.lazy-load-footer63>#recordsPageLabel{text-align:center}
+.analytics-section-loading63{min-height:96px;display:grid;place-items:center;color:#6b7280;font-size:.9rem}
+.analytics-section-error63{padding:12px;border-radius:10px;background:#fff1f2;color:#9f1239}
+@media(max-width:700px){.lazy-sentinel63{min-height:46px;margin:10px 0}}
+
+.analytics-sections>[data-analytics-section63]{min-height:260px}

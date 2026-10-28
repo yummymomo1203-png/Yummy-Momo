@@ -6,3 +6,4 @@ body .receipt.yummy-receipt *{font-family:inherit!important}body .receipt.yummy-
 .custom48 .custom48-save{position:static}.custom48 button,.custom48 input,.custom48 select{scroll-margin-bottom:100px}.custom49-section-save{margin-top:18px!important}
 
 .custom48 button,.custom48 input,.custom48 select{scroll-margin-top:140px}
+body.customer-site .dish-labels49{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}body.customer-site .dish-labels49 .menu-label{margin:0}body.customer-site .category-special49{display:inline-flex;align-items:center;gap:7px}body.customer-site .category-special49 .category-count{font-size:11px;opacity:.8}

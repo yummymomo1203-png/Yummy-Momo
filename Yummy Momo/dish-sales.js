@@ -7,7 +7,7 @@ function setRecordsView(view){
   $(id).className=recordsView===value?'primary-btn':'secondary-btn';$(id).setAttribute('aria-pressed',String(recordsView===value));
  }
  $('recordsExportButton').textContent=recordsView==='dishes'?'Export dish sales CSV':'Export orders CSV';
- if(recordsView==='dishes')refreshDishSales();
+ if(recordsView==='dishes')refreshDishSales();else if(currentTab==='history')refreshRecords();
 }
 function orderItemBreakdown(order){
  return `<details class="order-item-breakdown" data-order-items="${esc(order.id)}"><summary>${order.items.reduce((n,i)=>n+Number(i.qty||0),0)} items · View dish amounts</summary><div class="order-line-list">${order.items.map(i=>`<div class="order-line"><strong>${esc(i.name)}</strong><span>${Number(i.qty)} × ${money(i.price)}</span><b>${money(i.subtotal??Number(i.qty)*Number(i.price))}</b></div>`).join('')}</div></details>`;

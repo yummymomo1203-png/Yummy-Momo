@@ -11,6 +11,10 @@
 .celebration-track:hover{background:#71717a;}.celebration-track:focus-visible{outline:3px solid #9a6f3d;outline-offset:4px;}
 .celebration-particles{position:absolute;inset:0;overflow:hidden;pointer-events:none;z-index:1;}
 .food-flight{position:absolute;left:50%;top:0;display:block;font:normal clamp(38px,5vw,66px)/1.2 'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji',sans-serif;user-select:none;filter:drop-shadow(0 5px 8px #160b1540);opacity:0;animation:food-launch var(--duration,2200ms) cubic-bezier(.18,.55,.4,1) var(--delay,0ms) both;will-change:transform,opacity;}
+.party-pop{position:absolute;left:50%;top:52%;display:block;font:normal clamp(42px,8vw,84px)/1 'Noto Color Emoji','Apple Color Emoji','Segoe UI Emoji',sans-serif;opacity:0;filter:drop-shadow(0 5px 8px #160b1540);animation:party-burst 1050ms cubic-bezier(.16,.75,.25,1) var(--delay,0ms) both;}
+.party-confetti{position:absolute;left:0;top:0;width:10px;height:15px;border-radius:2px;background:var(--color);opacity:0;animation:confetti-burst 1600ms cubic-bezier(.1,.65,.3,1) var(--delay,0ms) both;}
+@keyframes party-burst{0%{opacity:0;transform:translate3d(-50%,-50%,0) scale(.2) rotate(0)}18%{opacity:1;transform:translate3d(-50%,-50%,0) scale(1.15) rotate(10deg)}100%{opacity:0;transform:translate3d(calc(-50% + var(--burst-x)),var(--burst-y),0) scale(.55) rotate(var(--burst-turn));}}
+@keyframes confetti-burst{0%{opacity:0;transform:translate3d(50vw,50vh,0) scale(.3) rotate(0)}12%{opacity:1}100%{opacity:0;transform:translate3d(var(--x),var(--y),0) scale(1) rotate(var(--turn));}}
 @keyframes food-launch{
  0%{opacity:0;transform:translate3d(var(--from-x),108vh,0) rotate(var(--from-turn));}
  7%{opacity:1;}
@@ -20,4 +24,4 @@
 @keyframes celebration-enter{from{opacity:0;transform:translateY(12px) scale(.97);}to{opacity:1;transform:translateY(0) scale(1);}}
 @media(max-width:600px){.celebration-card{padding:28px 24px;}.celebration-card h2{font-size:30px;}.celebration-check{margin-bottom:16px;}}
 @media(max-height:500px){.celebration-card{margin-top:20px;padding:20px 24px;}.celebration-check{width:44px;height:44px;margin-bottom:12px;}.celebration-card h2{font-size:28px;margin-bottom:12px;}.celebration-card p{margin-bottom:16px;}}
-@media(prefers-reduced-motion:reduce){.celebration-card{animation:none;}.food-flight{display:none;animation:none;}}
+@media(prefers-reduced-motion:reduce){.celebration-card{animation:none;}.food-flight,.party-pop,.party-confetti{display:none;animation:none;}}

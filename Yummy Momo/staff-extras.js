@@ -52,7 +52,7 @@ window.RestaurantAlerts=(()=>{
   const preset=override||settings[kind+'_sound'];if(preset==='none')return [];if(!override){const custom=window.AlertAudio?.alarm(kind,context);if(custom)return custom;}
   if(!context||context.state!=='running'||document.hidden)return [];
   const nodes=[],notes=presets[preset]||presets.chime,t=context.currentTime;
-  notes.forEach((hz,i)=>{const o=context.createOscillator(),g=context.createGain(),at=t+i*.28;o.type=preset==='doorbell'?'sine':'triangle';o.frequency.value=hz;g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(.18,at+.02);g.gain.exponentialRampToValueAtTime(.0001,at+.55);o.connect(g);g.connect(AlertDevice.output(context));o.start(at);o.stop(at+.56);o.onended=()=>{o.disconnect();g.disconnect();};nodes.push(o);});return nodes;
+  notes.forEach((hz,i)=>{const o=context.createOscillator(),g=context.createGain(),at=t+i*.28;o.type=preset==='doorbell'?'sine':'triangle';o.frequency.value=hz;g.gain.setValueAtTime(.0001,at);g.gain.exponentialRampToValueAtTime(kind==='orders'?.54:.18,at+.02);g.gain.exponentialRampToValueAtTime(.0001,at+.55);o.connect(g);g.connect(AlertDevice.output(context));o.start(at);o.stop(at+.56);o.onended=()=>{o.disconnect();g.disconnect();};nodes.push(o);});return nodes;
  }
  async function prepareAudio(context){audioContexts.add(context);await AlertAudio.warm(context);return context;}
  async function reloadAudio(){for(const c of audioContexts)try{await AlertAudio.warm(c);}catch(e){showToast('Audio could not load: '+e.message);}}
@@ -96,31 +96,9 @@ async function markStockNotification(id){try{await Cloud.rpc('restaurant_stock_a
 function pageStockNotifications(direction){stockNotificationsOffset=Math.max(0,stockNotificationsOffset+50*direction);refreshStockNotifications();}
 document.addEventListener('click',e=>{const b=e.target.closest('[data-stock-notice]');if(b)markStockNotification(b.dataset.stockNotice);});
 
-// Immediate changes; Undo uses a server-issued token and never rewrites stale state.
-let savedUndo=[];try{savedUndo=Cloud.sessionRead('RESTAURANT_ORDER_UNDO_v1',[],true);}catch{}
-const orderUndoReceipts=new Map(Array.isArray(savedUndo)?savedUndo:[]);const orderActionsBusy=new Set();
-// Rejected cards stay visible for four minutes from the SERVER action time.
-// Never restart this deadline after refresh; no cloud order/history is deleted.
-const REJECTED_CARD_LIFETIME_MS=4*60*1000;
-function rejectedCardRemaining(o,now=Date.now()){
- if(o.status!=='Rejected')return Infinity;
- const rejectedAt=Date.parse(o.updated_at);
- return Number.isFinite(rejectedAt)?Math.max(0,rejectedAt+REJECTED_CARD_LIFETIME_MS-now):0;
-}
-function pruneRejectedUndoActions(now=Date.now()){
- let changed=false;
- for(const [id,o] of orderUndoReceipts){
-  if(o.status==='Rejected'&&rejectedCardRemaining(o,now)<=0&&!orderActionsBusy.has(id)){
-   orderUndoReceipts.delete(id);changed=true;
-  }
- }
- if(changed)persistUndoActions();
-}
-function persistUndoActions(){try{Cloud.sessionWrite('RESTAURANT_ORDER_UNDO_v1',[...orderUndoReceipts].slice(-500),true);}catch{}}
-function undoButton(o){const r=orderUndoReceipts.get(o.id);return r?`<button class="secondary-btn order-corner-undo" type="button" data-undo-order="${Cloud.esc(o.id)}" ${orderActionsBusy.has(o.id)?'disabled':''}>${orderActionsBusy.has(o.id)?'Saving…':'↶ Undo '+(r.status==='Rejected'?'reject':'accept')}</button>`:'';}
-function observeUndoActions(rows){pruneRejectedUndoActions();for(const [id,r] of orderUndoReceipts){const current=rows.find(o=>o.id===id);if((!current&&r.status!=='Rejected')||(current&&(current.status!==r.status||Date.parse(current.updated_at)!==Date.parse(r.updated_at))))orderUndoReceipts.delete(id);}persistUndoActions();}
-async function undoOrderAction(id){pruneRejectedUndoActions();const r=orderUndoReceipts.get(id);if(!r||orderActionsBusy.has(id))return;orderActionsBusy.add(id);renderOrders();try{await Cloud.rpc('restaurant_undo_staff_action',{p_id:id,p_token:r.undo_token},true);orderUndoReceipts.delete(id);Cloud.invalidateOrders();showToast('Undone. Order is pending again.');}catch(e){showToast('Cannot undo: '+e.message);if(!/network|fetch|connection/i.test(e.message))orderUndoReceipts.delete(id);}finally{persistUndoActions();orderActionsBusy.delete(id);await refreshCloud();renderOrders();}}
-document.addEventListener('click',e=>{const b=e.target.closest('[data-undo-order]');if(b)undoOrderAction(b.dataset.undoOrder);});
+// Status mutations cannot be reversed from the Pending Orders interface.
+const orderActionsBusy=new Set();
+try{Cloud.sessionRemove('RESTAURANT_ORDER_UNDO_v1',true);}catch{}
 
 
 function closeMenuArrangement(){if(!layoutBusy)setMenuView('items');}

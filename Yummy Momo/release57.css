@@ -1,0 +1,23 @@
+/* Release57: category banner framing, diet markers in category rows, and custom billing items. */
+body.customer-site .dish-title-line49{display:flex;align-items:center;gap:9px;min-width:0}
+body.customer-site .dish-title-line49 .item-title{min-width:0}
+body.customer-site .dish-title-line49 .badge-veg-nonveg{margin:0;flex:0 0 14px}
+.custom48 .category-banner-editor57{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(220px,.8fr);gap:16px;align-items:start;margin:14px 0}
+.custom48 .category-banner-preview57{aspect-ratio:16/3;overflow:hidden;border:1px solid var(--border,#ddd);border-radius:12px;background:var(--soft,#fafafa)}
+.custom48 .category-banner-preview57:empty::before{content:'Upload a banner image to preview and position it';min-height:110px;display:grid;place-items:center;padding:16px;text-align:center;color:var(--muted,#71717a);font-size:13px}
+.custom48 .category-banner-preview57 img{display:block!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:cover!important;margin:0!important;border-radius:0!important;will-change:transform}
+.custom48 .category-banner-controls57{display:grid;gap:8px}.custom48 .category-banner-controls57 label{margin:0}.custom48 .category-banner-controls57 input[type=range]{width:100%;min-height:30px;margin-top:4px;padding:0;accent-color:var(--red,#e23744)}.custom48 .category-banner-controls57 output{float:right;font-weight:700}
+.manual-custom57{border:1px solid var(--line,#e5e5eb);border-radius:14px;padding:16px;margin:0 0 18px;background:var(--surface-alt,#fafafa)}
+.manual-custom57 h3{margin:0 0 4px}.manual-custom57 .hint{margin:0 0 12px}.manual-custom-grid57{display:grid;grid-template-columns:minmax(180px,2fr) minmax(120px,1fr) 88px auto;gap:10px;align-items:end}.manual-custom-grid57 label{margin:0}.manual-custom-grid57 input{width:100%;box-sizing:border-box;margin-top:6px}.manual-custom-grid57 button{min-height:44px;white-space:nowrap}
+.billing-title57{display:flex;align-items:center;gap:9px}.billing-title57 h3{margin:0!important}.billing-diet57{width:14px;height:14px;border:1.5px solid;display:inline-grid;place-items:center;border-radius:3px;flex:0 0 14px}.billing-diet57 i{width:6px;height:6px;border-radius:50%;display:block}.billing-diet57.is-veg{border-color:#17823b}.billing-diet57.is-veg i{background:#17823b}.billing-diet57.is-nonveg{border-color:#b3261e}.billing-diet57.is-nonveg i{background:#b3261e}
+.manual-cart-lines .custom-line57{align-items:center}.manual-cart-lines .custom-line57 span{flex:1}.manual-cart-lines .custom-line57 small{display:block;font-size:11px;opacity:.7;margin-top:2px}.custom-remove57{width:32px;height:32px;min-height:32px;padding:0;border-radius:50%;border:1px solid var(--line,#ddd);background:transparent;color:inherit;font-size:20px;line-height:1;cursor:pointer}
+@media(max-width:760px){.custom48 .category-banner-editor57{grid-template-columns:1fr}.manual-custom-grid57{grid-template-columns:1fr 1fr}.manual-custom-grid57 label:first-child{grid-column:1/-1}.manual-custom-grid57 button{grid-column:1/-1}}
+body.customer-site .menu-container:not(.category-menu49) .category-photo48{aspect-ratio:16/3;overflow:hidden}body.customer-site .menu-container:not(.category-menu49) .category-photo48 img{width:100%!important;height:100%!important;max-height:none!important;object-fit:cover!important}
+
+/* Release58 low-egress image delivery: no `src` until near viewport. */
+body.customer-site img[data-low-src]{opacity:0}
+body.customer-site .category-banner49,
+body.customer-site .menu-container:not(.category-menu49) .category-photo48{background:linear-gradient(100deg,var(--soft,#f7f7f9),var(--surface,#fff),var(--soft,#f7f7f9))}
+body.customer-site img[src].item-img,
+body.customer-site .category-photo48 img[src]{opacity:1;transition:opacity .16s ease-out}
+@media (prefers-reduced-motion:reduce){body.customer-site img[src].item-img,body.customer-site .category-photo48 img[src]{transition:none}}

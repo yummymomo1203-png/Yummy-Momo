@@ -1,0 +1,18 @@
+/* Release59: optional payment-method editing in Order Records. */
+.record-payment59{display:flex;align-items:center;flex-wrap:wrap;gap:8px;min-width:190px}
+.record-payment59 label{display:inline-flex;align-items:center;gap:7px;margin:0;padding:7px 10px;border:1px solid #b89670;border-radius:10px;cursor:pointer;font-weight:700;white-space:nowrap;background:var(--surface,#fff)}
+.record-payment59 input[type=radio]{width:19px;height:19px;min-height:19px;margin:0;accent-color:#e23744}
+.record-payment59 label:has(input:checked){border-color:#e23744;background:#fff3f4}
+.record-payment59 label:has(input:disabled){cursor:wait;opacity:.65}
+.record-payment-option59{margin:14px 0;padding:12px 14px;border:1px solid var(--line,#e5e5eb);border-radius:12px;background:var(--surface-alt,#fafafa)}
+.record-payment-option59>label{display:flex;align-items:center;gap:9px;font-weight:700;margin:0}
+.record-payment-option59 input{width:18px;height:18px;min-height:18px;margin:0;accent-color:#e23744}
+.record-payment-option59 .hint{margin:6px 0 0 27px}
+@media(max-width:760px){.record-payment59{min-width:0}.record-payment59 label{padding:6px 8px}}
+
+/* Release61: one-time QR payment selection and configurable timeout. */
+.record-payment-readonly61{font-weight:700;white-space:nowrap}
+.record-payment-option59 .timeout-row61{display:grid;grid-template-columns:minmax(180px,1fr) minmax(90px,130px);align-items:center;gap:10px;margin:12px 0 0 27px}
+.record-payment-option59 .timeout-row61 label{font-weight:600}
+.record-payment-option59 .timeout-row61 input{width:100%;min-height:40px;margin:0;padding:8px 10px}
+@media(max-width:620px){.record-payment-option59 .timeout-row61{grid-template-columns:1fr;margin-left:0}}
