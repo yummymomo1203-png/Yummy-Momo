@@ -137,7 +137,6 @@ function actionButtons(o,withDevice=true){
 }
 function shortId(o){return Cloud.orderLabel(o);}
 function renderOrders(){
- pruneRejectedUndoActions();
  const active=orders.filter(o=>!terminal(o.status));$('activeOrdersBadge').textContent=active.filter(o=>o.status==='Pending').length;
  const filters=[['active','All open'],['Pending','Pending orders'],['Cancelled','Cancelled']];
  const filterHTML=filters.map(([k,v])=>`<button class="nav-tab-btn ${currentFilter===k?'active':''}" data-filter="${k}">${v}</button>`).join('');if($('orderFilters').innerHTML!==filterHTML)$('orderFilters').innerHTML=filterHTML;
