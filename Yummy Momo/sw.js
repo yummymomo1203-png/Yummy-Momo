@@ -6,7 +6,7 @@ self.addEventListener('push',event=>{
  event.waitUntil((async()=>{
   let data;try{data=event.data?.json();}catch{return;}
   if(!data||!['waiter','kitchen'].includes(data.kind)||!data.tag||!Number.isFinite(Date.parse(data.expiresAt))||Date.parse(data.expiresAt)<=Date.now())return;
-  const path=new URL(data.kind==='waiter'?'waiter.html':data.screen==='orders'?'kitchen.html#orders':data.screen==='notifications'?'kitchen.html#notifications':'kitchen.html#requests',self.registration.scope).href;
+  const path=new URL(data.kind==='waiter'?(data.screen==='orders'?'waiter.html#orders':'waiter.html#requests'):data.screen==='orders'?'kitchen.html#orders':data.screen==='notifications'?'kitchen.html#notifications':'kitchen.html#requests',self.registration.scope).href;
   const eventKind=data.event_type==='new_order'?'order':data.event_type==='low_stock'?'stock':data.event_type==='blocked_scan'?'security':'request';
   const eventKey=eventKind+':'+data.event_id;
   const clients=await self.clients.matchAll({type:'window',includeUncontrolled:true});
@@ -26,7 +26,8 @@ self.addEventListener('notificationclick',event=>{
  event.waitUntil((async()=>{
   const kind=event.notification.data?.kind;
   if(!['waiter','kitchen'].includes(kind))return;
-  const url=new URL(kind==='waiter'?'waiter.html':event.notification.data?.screen==='orders'?'kitchen.html#orders':event.notification.data?.screen==='notifications'?'kitchen.html#notifications':'kitchen.html#requests',self.registration.scope);
+  const screen=event.notification.data?.screen;
+  const url=new URL(kind==='waiter'?(screen==='orders'?'waiter.html#orders':'waiter.html#requests'):screen==='orders'?'kitchen.html#orders':screen==='notifications'?'kitchen.html#notifications':'kitchen.html#requests',self.registration.scope);
   const windows=await self.clients.matchAll({type:'window',includeUncontrolled:true});
   const existing=windows.find(c=>new URL(c.url).pathname===url.pathname&&new URL(c.url).origin===url.origin);
   if(existing){await existing.focus();existing.postMessage({type:'restaurant-push-open',kind,screen:event.notification.data?.screen});}

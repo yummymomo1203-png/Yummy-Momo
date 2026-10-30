@@ -38,7 +38,7 @@ const RequestRing=(()=>{
   }
   function update(next,access=true){
    allowed=access;
-   if(kind==='order'&&access){
+   if(kind==='order'&&access&&scope==='kitchen-orders'){
     const incoming=next.filter(r=>r.status==='Pending'),fresh=incoming.filter(r=>!hapticSeen.has(r.id));
     for(const r of incoming){hapticSeen.add(r.id);if(hapticSeen.size>1000)hapticSeen.delete(hapticSeen.values().next().value);}
     if(fresh.length)vibrateStrong();

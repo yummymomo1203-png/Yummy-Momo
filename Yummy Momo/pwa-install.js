@@ -20,7 +20,7 @@
   };
   if (!window.isSecureContext || !('serviceWorker' in navigator)) return;
   window.addEventListener('load', () => {
-    navigator.serviceWorker.register(new URL('sw.js?v=yummy-64', location.href), {
+    navigator.serviceWorker.register(new URL('sw.js?v=yummy-65', location.href), {
       scope: new URL('./', location.href).pathname
     }).catch(error => console.warn('Waiter service worker registration failed:', error));
   }, { once: true });
